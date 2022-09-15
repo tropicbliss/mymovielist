@@ -19,6 +19,15 @@ const firebaseConfig = {
 };
 ```
 
+In the `functions` directory, create `apiKeys.js` in the following format:
+
+```js
+const NEWS_API_KEY = "foo";
+const OMDB_API_KEY = "bar";
+
+module.exports = { NEWS_API_KEY, OMDB_API_KEY };
+```
+
 ```sh
 npm run dev
 ```
