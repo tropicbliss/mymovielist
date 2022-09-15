@@ -17,13 +17,8 @@ const firebaseConfig = {
   messagingSenderId: "fred",
   appId: "thud",
 };
+```
 
 ```sh
 npm run dev
-```
-
-export const app = initializeApp(firebaseConfig);
-export const database = getFirestore(app);
-export const auth = getAuth(app);
-export const functions = getFunctions(app);
 ```
