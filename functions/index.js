@@ -7,6 +7,7 @@ const {
 } = require("./utilities");
 const fetch = require("node-fetch");
 const { NEWS_API_KEY, OMDB_API_KEY } = require("./apiKeys");
+const Filter = require("bad-words");
 
 const INITIAL_OMDB_URL = "http://www.omdbapi.com/?apikey=";
 
@@ -66,3 +67,14 @@ exports.searchMovie = functions.https.onCall((data, context) => {
       };
     });
 });
+
+exports.detectBadWords = functions.firestore
+  .document("messages/{msgId}")
+  .onCreate((doc, ctx) => {
+    const filter = new Filter();
+    const { text } = doc.data();
+    if (filter.isProfane(text)) {
+      const cleaned = filter.clean(text);
+      doc.ref.update({ text: cleaned });
+    }
+  });

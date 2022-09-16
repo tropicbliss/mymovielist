@@ -58,7 +58,7 @@ const Nav = () => {
     : defaultPhotoURL;
 
   return (
-    <>
+    <div className="sticky top-0">
       <Toast
         show={show}
         setShow={setShow}
@@ -158,6 +158,7 @@ const Nav = () => {
                             className={navStyles.pfp}
                             src={photoURL}
                             alt=""
+                            referrerPolicy="no-referrer"
                           />
                         </Menu.Button>
                       </div>
@@ -277,7 +278,7 @@ const Nav = () => {
           </>
         )}
       </Disclosure>
-    </>
+    </div>
   );
 };
 

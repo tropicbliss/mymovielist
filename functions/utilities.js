@@ -1,5 +1,4 @@
 const fetch = require("node-fetch");
-const sharp = require("sharp");
 
 const formatArticles = (article) => {
   const title = article.title;
