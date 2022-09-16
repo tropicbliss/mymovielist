@@ -10,10 +10,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import navStyles from "../styles/Nav.module.css";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "../utilities";
 
 async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();

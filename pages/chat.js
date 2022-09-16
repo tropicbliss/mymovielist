@@ -15,16 +15,13 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import navStyles from "../styles/Nav.module.css";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import Toast from "../components/Toast";
+import { classNames } from "../utilities";
 
 const chat = () => {
   const [user] = useAuthState(auth);
 
   return <section>{user ? <ChatRoom /> : <SignInWarning />}</section>;
 };
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 function ChatRoom() {
   const dummy = useRef();

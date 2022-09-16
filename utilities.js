@@ -21,3 +21,7 @@ export const getID = async (title) => {
   const id = await (await searchEndpoint({ search: title })).data.id;
   return id;
 };
+
+export function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}

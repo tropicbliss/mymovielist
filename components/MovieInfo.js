@@ -1,8 +1,5 @@
 import { StarIcon } from "@heroicons/react/20/solid";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "../utilities";
 
 function getStars(imdbRating) {
   if (imdbRating === null) {
