@@ -10,6 +10,7 @@ import {
   addDoc,
   query,
   serverTimestamp,
+  limitToLast,
 } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import navStyles from "../styles/Nav.module.css";
@@ -26,7 +27,7 @@ const chat = () => {
 function ChatRoom() {
   const dummy = useRef();
   const messagesRef = collection(database, "messages");
-  const q = query(messagesRef, orderBy("createdAt"), limit(25));
+  const q = query(messagesRef, orderBy("createdAt"), limitToLast(25));
   const [messages] = useCollectionData(q);
   const [formValue, setFormValue] = useState("");
   const [show, setShow] = useState(false);
