@@ -6,7 +6,6 @@ import { database } from "../firebaseConfig";
 import {
   collection,
   orderBy,
-  limit,
   addDoc,
   query,
   serverTimestamp,

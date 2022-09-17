@@ -68,8 +68,19 @@ exports.searchMovie = functions.https.onCall((data, context) => {
     });
 });
 
-exports.detectBadWords = functions.firestore
+exports.detectBadWordsInChat = functions.firestore
   .document("messages/{msgId}")
+  .onCreate((doc, ctx) => {
+    const filter = new Filter();
+    const { text } = doc.data();
+    if (filter.isProfane(text)) {
+      const cleaned = filter.clean(text);
+      doc.ref.update({ text: cleaned });
+    }
+  });
+
+exports.detectBadWordsInReview = functions.firestore
+  .document("reviews/{msgId}")
   .onCreate((doc, ctx) => {
     const filter = new Filter();
     const { text } = doc.data();

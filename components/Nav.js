@@ -55,7 +55,7 @@ const Nav = () => {
     : defaultPhotoURL;
 
   return (
-    <div className="sticky top-0">
+    <>
       <Toast
         show={show}
         setShow={setShow}
@@ -275,7 +275,7 @@ const Nav = () => {
           </>
         )}
       </Disclosure>
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,21 @@
 import { StarIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../utilities";
+import navStyles from "../styles/Nav.module.css";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebaseConfig";
+import { useState } from "react";
+import {
+  addDoc,
+  collection,
+  orderBy,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
+import { database } from "../firebaseConfig";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { format } from "date-fns";
+import Toast from "../components/Toast";
 
 function getStars(imdbRating) {
   if (imdbRating === null) {
@@ -15,9 +31,49 @@ const MovieInfo = ({ movieInfo, id }) => {
   delete tableInfo.info.Plot;
   const stars = getStars(movieInfo.info.imdbRating);
   const imdbLink = `https://www.imdb.com/title/${id}/`;
+  const [user] = useAuthState(auth);
+  const defaultPhotoURL = "https://i.stack.imgur.com/34AD2.jpg";
+  const photoURL = user
+    ? user.photoURL
+      ? user.photoURL
+      : defaultPhotoURL
+    : defaultPhotoURL;
+  const [review, setReview] = useState("");
+  const reviewsRef = collection(database, "reviews");
+  const q = query(
+    reviewsRef,
+    orderBy("createdAt", "desc"),
+    where("movieId", "==", id)
+  );
+  const [reviews] = useCollectionData(q);
+  const [show, setShow] = useState(false);
+  const sendReview = async (e) => {
+    e.preventDefault();
+    if (review === "") {
+      setShow(true);
+      return;
+    }
+    const { displayName, photoURL, uid } = auth.currentUser;
+    await addDoc(reviewsRef, {
+      movieId: id,
+      text: review,
+      createdAt: serverTimestamp(),
+      displayName,
+      photoURL,
+      uid,
+    });
+    setReview("");
+  };
 
   return (
     <div className="bg-white">
+      <Toast
+        show={show}
+        setShow={setShow}
+        isSuccess={false}
+        title="Unable to send review"
+        description="Review cannot be empty."
+      />
       <div className="mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
           <div className="lg:col-span-4 lg:row-end-1">
@@ -99,6 +155,86 @@ const MovieInfo = ({ movieInfo, id }) => {
                 </dl>
               </div>
             </div>
+          </div>
+
+          <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
+            {user && (
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <img className={navStyles.pfp} src={photoURL} alt="" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <form className="relative" onSubmit={sendReview}>
+                    <div className="overflow-hidden rounded-lg border border-gray-300 shadow-sm focus-within:border-cyber-purple focus-within:ring-1 focus-within:ring-cyber-purple">
+                      <label htmlFor="comment" className="sr-only">
+                        Add your review
+                      </label>
+                      <textarea
+                        rows={3}
+                        name="comment"
+                        id="comment"
+                        className="block w-full resize-none border-0 py-3 focus:ring-0 sm:text-sm"
+                        placeholder="Add your review..."
+                        value={review}
+                        onChange={(e) => setReview(e.target.value)}
+                      />
+
+                      {/* Spacer element to match the height of the toolbar */}
+                      <div className="py-2" aria-hidden="true">
+                        {/* Matches height of button in toolbar (1px border + 36px content height) */}
+                        <div className="py-px">
+                          <div className="h-9" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="absolute inset-x-0 bottom-0 flex justify-end py-2 pl-3 pr-2">
+                      <div className="flex-shrink-0">
+                        <button
+                          type="submit"
+                          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyber-purple focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                          Post
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+            {reviews &&
+              reviews.map((r, idx) => (
+                <div key={idx} className="flex space-x-4 text-sm text-gray-500">
+                  <div className="flex-none py-10">
+                    <img src={r.photoURL} alt="" className={navStyles.pfp} />
+                  </div>
+                  <div
+                    className={classNames(
+                      idx === 0 ? "" : "border-t border-gray-200",
+                      "py-10"
+                    )}
+                  >
+                    <h3 className="font-medium text-gray-900">
+                      {r.displayName}
+                    </h3>
+                    <p>
+                      <time
+                        dateTime={
+                          r.createdAt &&
+                          format(r.createdAt.toDate(), "yyyy-MM-dd")
+                        }
+                      >
+                        {r.createdAt &&
+                          format(r.createdAt.toDate(), "MMMM dd, yyyy")}
+                      </time>
+                    </p>
+
+                    <div className="prose prose-sm mt-4 max-w-none text-gray-500">
+                      <p>{r.text}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>
