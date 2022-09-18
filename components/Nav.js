@@ -119,7 +119,7 @@ const Nav = () => {
                           aria-hidden="true"
                         />
                       </div>
-                      <form onSubmit={(e) => redirectToMoviePage(e)}>
+                      <form onSubmit={redirectToMoviePage}>
                         <input
                           id="search"
                           name="search"

@@ -8,6 +8,11 @@ const index = ({ movieInfo, id }) => {
 export const getServerSideProps = async (context) => {
   const id = context.params.id;
   const movieInfo = await getMovieInfo(id);
+  if (!movieInfo.info) {
+    return {
+      notFound: true,
+    };
+  }
   return {
     props: {
       movieInfo,

@@ -39,6 +39,33 @@ exports.movieInfo = functions.https.onCall((data, context) => {
   return fetch(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
     .then((res) => res.json())
     .then(async (movie) => {
+      if (movie.Response === "False") {
+        return {
+          info: null,
+          poster: null,
+        };
+      }
+      const result = mapMovieInfo(movie);
+      return {
+        info: result,
+        poster: await imageUrlToBase64(
+          `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
+        ),
+      };
+    });
+});
+
+exports.movieInfoWithSearch = functions.https.onCall((data, context) => {
+  const searchTerm = data.search;
+  return fetch(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
+    .then((res) => res.json())
+    .then(async (movie) => {
+      if (movie.Response === "False") {
+        return {
+          info: null,
+          poster: null,
+        };
+      }
       const result = mapMovieInfo(movie);
       return {
         info: result,

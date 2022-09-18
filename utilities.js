@@ -22,6 +22,18 @@ export const getID = async (title) => {
   return id;
 };
 
+export const getMovieInfoFromTitle = async (title) => {
+  const movieInfoFromTitleEndpoint = httpsCallable(
+    functions,
+    "movieInfoWithSearch"
+  );
+  const data = await (await movieInfoFromTitleEndpoint({ search: title })).data;
+  return {
+    info: data.info,
+    poster: data.poster,
+  };
+};
+
 export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
