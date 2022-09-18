@@ -20,35 +20,22 @@ const compare = () => {
   }, []);
   const getMovieInfo = async (e, searchNum) => {
     e.preventDefault();
-    if (searchNum === 1) {
-      if (search1 === "") {
-        setErrorMsg("Movie entered cannot be empty.");
-        setShow(true);
-        return;
-      }
-      const data = await getMovieInfoFromTitle(search1);
-      if (!data.info) {
-        setErrorMsg("We were unable to find the movie you were looking for.");
-        setShow(true);
-        return;
-      }
-      setMovieInfo1(data);
-      setSearch1("");
-    } else {
-      if (search2 === "") {
-        setErrorMsg("Movie entered cannot be empty.");
-        setShow(true);
-        return;
-      }
-      const data = await getMovieInfoFromTitle(search2);
-      if (!data.info) {
-        setErrorMsg("We were unable to find the movie you were looking for.");
-        setShow(true);
-        return;
-      }
-      setMovieInfo2(data);
-      setSearch2("");
+    const search = searchNum === 1 ? search1 : search2;
+    const setMovieInfo = searchNum === 1 ? setMovieInfo1 : setMovieInfo2;
+    const setSearch = searchNum === 1 ? setSearch1 : setSearch2;
+    if (search === "") {
+      setErrorMsg("Movie entered cannot be empty.");
+      setShow(true);
+      return;
     }
+    const data = await getMovieInfoFromTitle(search);
+    if (!data.info) {
+      setErrorMsg("We were unable to find the movie you were looking for.");
+      setShow(true);
+      return;
+    }
+    setMovieInfo(data);
+    setSearch("");
   };
 
   return (
