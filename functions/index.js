@@ -66,6 +66,7 @@ exports.movieInfoWithSearch = functions.https.onCall((data, context) => {
           poster: null,
         };
       }
+      const imdbId = movie.imdbID;
       const result = mapMovieInfo(movie);
       return {
         info: result,
