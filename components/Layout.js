@@ -3,6 +3,7 @@ import Meta from "./Meta";
 import Footer from "./Footer";
 import Router from "next/router";
 import { useEffect, useState } from "react";
+import { LinearProgress } from "@mui/material";
 
 const Layout = ({ children }) => {
   const [loading, setLoading] = useState(false);
@@ -32,14 +33,18 @@ const Layout = ({ children }) => {
   }, [Router.events]);
 
   return (
-    <div className={loading ? "cursor-wait" : ""}>
+    <>
       <Meta />
       <Nav />
       <div>
+        <LinearProgress
+          color="success"
+          className={loading ? "" : "invisible"}
+        />
         <main>{children}</main>
         <Footer />
       </div>
-    </div>
+    </>
   );
 };
 
