@@ -27,16 +27,15 @@ const compare = () => {
   }, [movieInfo1, movieInfo2]);
   const onSubmit = async (e, searchNum) => {
     e.preventDefault();
-    setLoad(true);
     const search = searchNum === 1 ? search1 : search2;
     const setMovieInfo = searchNum === 1 ? setMovieInfo1 : setMovieInfo2;
     const setSearch = searchNum === 1 ? setSearch1 : setSearch2;
     if (search === "") {
       setErrorMsg("Error comparing movies", "Movie entered cannot be empty.");
       setToast(true);
-      setLoad(false);
       return;
     }
+    setLoad(true);
     try {
       const data = await getMovieInfoFromTitle(search);
       if (!data.info) {

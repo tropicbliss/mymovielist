@@ -3,7 +3,7 @@ import { classNames } from "../utilities";
 import navStyles from "../styles/Nav.module.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   addDoc,
   collection,
@@ -26,7 +26,8 @@ function getStars(imdbRating) {
 }
 
 const MovieInfo = ({ movieInfo, id }) => {
-  const { setToast, setErrorMsg, unknownError } = useContext(GlobalContext);
+  const { setToast, setErrorMsg, unknownError, setLoad } =
+    useContext(GlobalContext);
   const tableInfo = JSON.parse(JSON.stringify(movieInfo));
   delete tableInfo.poster;
   delete tableInfo.info.Title;
@@ -48,6 +49,13 @@ const MovieInfo = ({ movieInfo, id }) => {
     where("movieId", "==", id)
   );
   const [reviews] = useCollectionData(q);
+  useEffect(() => {
+    if (reviews === null) {
+      setLoad(true);
+    } else {
+      setLoad(false);
+    }
+  }, [reviews]);
   const sendReview = async (e) => {
     e.preventDefault();
     if (review === "") {
@@ -55,6 +63,7 @@ const MovieInfo = ({ movieInfo, id }) => {
       setToast(true);
       return;
     }
+    setLoad(true);
     const { displayName, photoURL, uid } = auth.currentUser;
     try {
       await addDoc(reviewsRef, {
@@ -69,6 +78,7 @@ const MovieInfo = ({ movieInfo, id }) => {
       unknownError();
     } finally {
       setReview("");
+      setLoad(false);
     }
   };
 

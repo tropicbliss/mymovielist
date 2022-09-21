@@ -56,6 +56,7 @@ const Nav = () => {
       setToast(true);
       return;
     }
+    setLoad(true);
     try {
       const id = await getID(search);
       if (id === null) {
@@ -72,6 +73,7 @@ const Nav = () => {
       unknownError();
     } finally {
       setSearch("");
+      setLoad(false);
     }
   };
   const [user] = useAuthState(auth);

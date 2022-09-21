@@ -14,7 +14,6 @@ import {
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import navStyles from "../styles/Nav.module.css";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import Toast from "../components/Toast";
 import { classNames } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
 
@@ -25,7 +24,8 @@ const chat = () => {
 };
 
 function ChatRoom() {
-  const { setToast, setErrorMsg, unknownError } = useContext(GlobalContext);
+  const { setToast, setErrorMsg, unknownError, setLoad } =
+    useContext(GlobalContext);
   const dummy = useRef();
   const messagesRef = collection(database, "messages");
   const q = query(messagesRef, orderBy("createdAt"), limitToLast(25));
@@ -38,6 +38,7 @@ function ChatRoom() {
       setToast(true);
       return;
     }
+    setLoad(true);
     const { uid, photoURL } = auth.currentUser;
     try {
       await addDoc(messagesRef, {
@@ -50,6 +51,7 @@ function ChatRoom() {
       unknownError();
     } finally {
       setFormValue("");
+      setLoad(false);
     }
     dummy.current.scrollIntoView({ behavior: "smooth" });
   };
