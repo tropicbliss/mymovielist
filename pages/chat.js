@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
@@ -16,6 +16,7 @@ import navStyles from "../styles/Nav.module.css";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import Toast from "../components/Toast";
 import { classNames } from "../utilities";
+import { GlobalContext } from "../context/GlobalState";
 
 const chat = () => {
   const [user] = useAuthState(auth);
@@ -24,38 +25,37 @@ const chat = () => {
 };
 
 function ChatRoom() {
+  const { setToast, setErrorMsg, unknownError } = useContext(GlobalContext);
   const dummy = useRef();
   const messagesRef = collection(database, "messages");
   const q = query(messagesRef, orderBy("createdAt"), limitToLast(25));
   const [messages] = useCollectionData(q);
   const [formValue, setFormValue] = useState("");
-  const [show, setShow] = useState(false);
   const sendMessage = async (e) => {
     e.preventDefault();
     if (formValue === "") {
-      setShow(true);
+      setErrorMsg("Error sending message", "Message cannot be empty.");
+      setToast(true);
       return;
     }
     const { uid, photoURL } = auth.currentUser;
-    await addDoc(messagesRef, {
-      text: formValue,
-      createdAt: serverTimestamp(),
-      uid,
-      photoURL,
-    });
-    setFormValue("");
+    try {
+      await addDoc(messagesRef, {
+        text: formValue,
+        createdAt: serverTimestamp(),
+        uid,
+        photoURL,
+      });
+    } catch (e) {
+      unknownError();
+    } finally {
+      setFormValue("");
+    }
     dummy.current.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <Toast
-        show={show}
-        setShow={setShow}
-        isSuccess={false}
-        title="Unable to send message"
-        description="Message cannot be empty."
-      />
       <div>
         {messages &&
           messages.map((msg, idx) => <ChatMessage key={idx} message={msg} />)}

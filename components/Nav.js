@@ -34,20 +34,46 @@ async function handleUserPortal() {
 }
 
 const Nav = () => {
+  const {
+    load,
+    setLoad,
+    errorMsg,
+    setErrorMsg,
+    showToast,
+    setToast,
+    unknownError,
+    errorTitle,
+  } = useContext(GlobalContext);
   const [search, setSearch] = useState("");
   const router = useRouter();
   const redirectToMoviePage = async (e) => {
     e.preventDefault();
-    const id = await getID(search);
-    if (id === null) {
-      setShow(true);
-      setSearch("");
+    if (search === "") {
+      setErrorMsg(
+        "An error occured while searching",
+        "You cannot enter an empty search term."
+      );
+      setToast(true);
       return;
     }
-    router.push(`/moviedb/${id}`);
-    setSearch("");
+    try {
+      const id = await getID(search);
+      if (id === null) {
+        setErrorMsg(
+          "An error occured while searching",
+          "We were unable to find the movie you were looking for."
+        );
+        setToast(true);
+        setSearch("");
+        return;
+      }
+      router.push(`/moviedb/${id}`);
+    } catch (e) {
+      unknownError();
+    } finally {
+      setSearch("");
+    }
   };
-  const [show, setShow] = useState(false);
   const [user] = useAuthState(auth);
   const defaultPhotoURL = "https://i.stack.imgur.com/34AD2.jpg";
   const photoURL = user
@@ -55,7 +81,6 @@ const Nav = () => {
       ? user.photoURL
       : defaultPhotoURL
     : defaultPhotoURL;
-  const { load, setLoad } = useContext(GlobalContext);
   useEffect(() => {
     Router.events.on("routeChangeStart", () => {
       setLoad(true);
@@ -83,11 +108,11 @@ const Nav = () => {
   return (
     <>
       <Toast
-        show={show}
-        setShow={setShow}
+        show={showToast}
+        setShow={setToast}
         isSuccess={false}
-        title="An error occured while searching"
-        description="We were unable to find the movie you were looking for."
+        title={errorTitle}
+        description={errorMsg}
       />
       <Disclosure as="nav" className="bg-gray-800">
         {({ open }) => (

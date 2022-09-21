@@ -1,16 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { getMovieInfo, getMovieInfoFromTitle } from "../utilities";
-import Toast from "../components/Toast";
 import { GlobalContext } from "../context/GlobalState";
 
 const compare = () => {
+  const { setToast, setErrorMsg, unknownError } = useContext(GlobalContext);
   const [search1, setSearch1] = useState("");
   const [search2, setSearch2] = useState("");
   const [movieInfo1, setMovieInfo1] = useState(null);
   const [movieInfo2, setMovieInfo2] = useState(null);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [show, setShow] = useState(false);
   const { setLoad } = useContext(GlobalContext);
   useEffect(() => {
     getMovieInfo("tt10872600").then((e) => {
@@ -34,32 +32,34 @@ const compare = () => {
     const setMovieInfo = searchNum === 1 ? setMovieInfo1 : setMovieInfo2;
     const setSearch = searchNum === 1 ? setSearch1 : setSearch2;
     if (search === "") {
-      setErrorMsg("Movie entered cannot be empty.");
-      setShow(true);
+      setErrorMsg("Error comparing movies", "Movie entered cannot be empty.");
+      setToast(true);
+      setLoad(false);
       return;
     }
-    const data = await getMovieInfoFromTitle(search);
-    if (!data.info) {
-      setErrorMsg("We were unable to find the movie you were looking for.");
-      setShow(true);
-      return;
+    try {
+      const data = await getMovieInfoFromTitle(search);
+      if (!data.info) {
+        setErrorMsg(
+          "Error comparing movies",
+          "We were unable to find the movie you were looking for."
+        );
+        setToast(true);
+        return;
+      }
+      setMovieInfo(data);
+    } catch (e) {
+      unknownError();
+    } finally {
+      setSearch("");
+      setLoad(false);
     }
-    setMovieInfo(data);
-    setSearch("");
-    setLoad(false);
   };
 
   return (
     <>
       {movieInfo1 && movieInfo2 && (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-16">
-          <Toast
-            show={show}
-            setShow={setShow}
-            isSuccess={false}
-            title="An error occured while searching"
-            description={errorMsg}
-          />
           <h1 className="text-center mb-16 text-4xl sm:text-5xl font-bold tracking-tight text-gray-900">
             Compare movies
           </h1>

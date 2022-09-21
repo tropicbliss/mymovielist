@@ -3,7 +3,7 @@ import { classNames } from "../utilities";
 import navStyles from "../styles/Nav.module.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   addDoc,
   collection,
@@ -16,6 +16,7 @@ import { database } from "../firebaseConfig";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { format } from "date-fns";
 import Toast from "../components/Toast";
+import { GlobalContext } from "../context/GlobalState";
 
 function getStars(imdbRating) {
   if (imdbRating === null) {
@@ -25,6 +26,7 @@ function getStars(imdbRating) {
 }
 
 const MovieInfo = ({ movieInfo, id }) => {
+  const { setToast, setErrorMsg, unknownError } = useContext(GlobalContext);
   const tableInfo = JSON.parse(JSON.stringify(movieInfo));
   delete tableInfo.poster;
   delete tableInfo.info.Title;
@@ -46,34 +48,32 @@ const MovieInfo = ({ movieInfo, id }) => {
     where("movieId", "==", id)
   );
   const [reviews] = useCollectionData(q);
-  const [show, setShow] = useState(false);
   const sendReview = async (e) => {
     e.preventDefault();
     if (review === "") {
-      setShow(true);
+      setErrorMsg("Error sending review", "Review cannot be empty.");
+      setToast(true);
       return;
     }
     const { displayName, photoURL, uid } = auth.currentUser;
-    await addDoc(reviewsRef, {
-      movieId: id,
-      text: review,
-      createdAt: serverTimestamp(),
-      displayName,
-      photoURL,
-      uid,
-    });
-    setReview("");
+    try {
+      await addDoc(reviewsRef, {
+        movieId: id,
+        text: review,
+        createdAt: serverTimestamp(),
+        displayName,
+        photoURL,
+        uid,
+      });
+    } catch (e) {
+      unknownError();
+    } finally {
+      setReview("");
+    }
   };
 
   return (
     <div className="bg-white">
-      <Toast
-        show={show}
-        setShow={setShow}
-        isSuccess={false}
-        title="Unable to send review"
-        description="Review cannot be empty."
-      />
       <div className="mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
           <div className="lg:col-span-4 lg:row-end-1">
