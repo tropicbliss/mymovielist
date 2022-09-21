@@ -2,7 +2,7 @@ import News from "../components/News";
 import { getNews } from "../utilities";
 
 const news = ({ articles }) => {
-  return <News articles={articles} isShowTitle={false} />;
+  return <News articles={articles} />;
 };
 
 export const getServerSideProps = async () => {

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { getMovieInfo, getMovieInfoFromTitle } from "../utilities";
 import Toast from "../components/Toast";
+import { GlobalContext } from "../context/GlobalState";
 
 const compare = () => {
   const [search1, setSearch1] = useState("");
@@ -10,6 +11,7 @@ const compare = () => {
   const [movieInfo2, setMovieInfo2] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [show, setShow] = useState(false);
+  const { setLoad } = useContext(GlobalContext);
   useEffect(() => {
     getMovieInfo("tt10872600").then((e) => {
       setMovieInfo1(e);
@@ -18,8 +20,16 @@ const compare = () => {
       setMovieInfo2(e);
     });
   }, []);
+  useEffect(() => {
+    if (movieInfo1 && movieInfo2) {
+      setLoad(false);
+    } else {
+      setLoad(true);
+    }
+  }, [movieInfo1, movieInfo2]);
   const onSubmit = async (e, searchNum) => {
     e.preventDefault();
+    setLoad(true);
     const search = searchNum === 1 ? search1 : search2;
     const setMovieInfo = searchNum === 1 ? setMovieInfo1 : setMovieInfo2;
     const setSearch = searchNum === 1 ? setSearch1 : setSearch2;
@@ -36,6 +46,7 @@ const compare = () => {
     }
     setMovieInfo(data);
     setSearch("");
+    setLoad(false);
   };
 
   return (

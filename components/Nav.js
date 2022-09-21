@@ -1,16 +1,18 @@
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon, XMarkIcon, FilmIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { getID } from "../utilities";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import Toast from "./Toast";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import navStyles from "../styles/Nav.module.css";
 import { classNames } from "../utilities";
+import { LinearProgress } from "@mui/material";
+import { GlobalContext } from "../context/GlobalState";
 
 async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
@@ -53,6 +55,30 @@ const Nav = () => {
       ? user.photoURL
       : defaultPhotoURL
     : defaultPhotoURL;
+  const { load, setLoad } = useContext(GlobalContext);
+  useEffect(() => {
+    Router.events.on("routeChangeStart", () => {
+      setLoad(true);
+    });
+    Router.events.on("routeChangeComplete", () => {
+      setLoad(false);
+    });
+    Router.events.on("routeChangeError", () => {
+      setLoad(false);
+    });
+
+    return () => {
+      Router.events.off("routeChangeStart", () => {
+        setLoad(true);
+      });
+      Router.events.off("routeChangeComplete", () => {
+        setLoad(false);
+      });
+      Router.events.off("routeChangeError", () => {
+        setLoad(false);
+      });
+    };
+  }, [Router.events]);
 
   return (
     <>
@@ -275,6 +301,7 @@ const Nav = () => {
           </>
         )}
       </Disclosure>
+      <LinearProgress color="success" className={load ? "" : "invisible"} />
     </>
   );
 };
