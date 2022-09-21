@@ -59,7 +59,7 @@ const compare = () => {
   return (
     <>
       {movieInfo1 && movieInfo2 && (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8 sm:mt-16">
           <h1 className="text-center mb-16 text-4xl sm:text-5xl font-bold tracking-tight text-gray-900">
             Compare movies
           </h1>
