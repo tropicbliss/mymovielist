@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const axios = require("axios").default;
 
 const formatArticles = (article) => {
   const title = article.title;
@@ -63,14 +63,19 @@ const mapMovieInfo = (movie) => {
 };
 
 const imageUrlToBase64 = async (url) => {
-  const response = await fetch(url);
-  const buffer = await response.buffer();
-  const data =
-    "data:" +
-    response.headers.get("content-type") +
-    ";base64," +
-    buffer.toString("base64");
-  return data;
+  return axios
+    .get(url, {
+      responseType: "arraybuffer",
+    })
+    .then((res) => {
+      const buffer = res.data;
+      const data =
+        "data:" +
+        res.headers["content-type"] +
+        ";base64," +
+        buffer.toString("base64");
+      return data;
+    });
 };
 
 module.exports = { formatArticles, mapMovieInfo, imageUrlToBase64 };

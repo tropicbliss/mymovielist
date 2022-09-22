@@ -13,11 +13,11 @@
   },
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.27.2",
     "bad-words": "^3.0.4",
     "firebase-admin": "^11.0.1",
     "firebase-functions": "^3.23.0",
-    "newsapi": "^2.4.1",
-    "node-fetch": "^3.2.10"
+    "newsapi": "^2.4.1"
   },
   "devDependencies": {
     "firebase-functions-test": "^2.4.0"

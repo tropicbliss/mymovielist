@@ -5,9 +5,9 @@ const {
   mapMovieInfo,
   imageUrlToBase64,
 } = require("./utilities");
-const fetch = require("node-fetch");
 const { NEWS_API_KEY, OMDB_API_KEY } = require("./apiKeys");
 const Filter = require("bad-words");
+const axios = require("axios").default;
 
 const INITIAL_OMDB_URL = "http://www.omdbapi.com/?apikey=";
 
@@ -36,8 +36,9 @@ exports.news = functions.https.onCall((data, context) => {
 
 exports.movieInfo = functions.https.onCall((data, context) => {
   const imdbId = data.id;
-  return fetch(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
-    .then((res) => res.json())
+  return axios
+    .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
+    .then((res) => res.data)
     .then(async (movie) => {
       if (movie.Response === "False") {
         return {
@@ -57,8 +58,9 @@ exports.movieInfo = functions.https.onCall((data, context) => {
 
 exports.movieInfoWithSearch = functions.https.onCall((data, context) => {
   const searchTerm = data.search;
-  return fetch(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
-    .then((res) => res.json())
+  return axios
+    .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
+    .then((res) => res.data)
     .then(async (movie) => {
       if (movie.Response === "False") {
         return {
@@ -81,8 +83,9 @@ exports.movieInfoWithSearch = functions.https.onCall((data, context) => {
 
 exports.searchMovie = functions.https.onCall((data, context) => {
   const searchTerm = data.search;
-  return fetch(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
-    .then((res) => res.json())
+  return axios
+    .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
+    .then((res) => res.data)
     .then((movie) => {
       if (movie.Response === "False") {
         return {
