@@ -13,7 +13,7 @@ const INITIAL_OMDB_URL = "http://www.omdbapi.com/?apikey=";
 
 const api = new NewsApi(NEWS_API_KEY);
 
-exports.news = functions.https.onCall((data, context) => {
+exports.news = functions.region("us-central1").https.onCall((data, context) => {
   return api.v2
     .topHeadlines({
       country: "us",
@@ -34,73 +34,80 @@ exports.news = functions.https.onCall((data, context) => {
     });
 });
 
-exports.movieInfo = functions.https.onCall((data, context) => {
-  const imdbId = data.id;
-  return axios
-    .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
-    .then((res) => res.data)
-    .then(async (movie) => {
-      if (movie.Response === "False") {
+exports.movieInfo = functions
+  .region("us-central1")
+  .https.onCall((data, context) => {
+    const imdbId = data.id;
+    return axios
+      .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
+      .then((res) => res.data)
+      .then(async (movie) => {
+        if (movie.Response === "False") {
+          return {
+            info: null,
+            poster: null,
+          };
+        }
+        const result = mapMovieInfo(movie);
         return {
-          info: null,
-          poster: null,
-        };
-      }
-      const result = mapMovieInfo(movie);
-      return {
-        info: result,
-        poster: await imageUrlToBase64(
-          `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
-        ),
-      };
-    });
-});
-
-exports.movieInfoWithSearch = functions.https.onCall((data, context) => {
-  const searchTerm = data.search;
-  return axios
-    .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
-    .then((res) => res.data)
-    .then(async (movie) => {
-      if (movie.Response === "False") {
-        return {
-          info: null,
-          poster: null,
-        };
-      }
-      const imdbId = movie.imdbID;
-      const result = mapMovieInfo(movie);
-      return {
-        info: result,
-        poster:
-          result &&
-          (await imageUrlToBase64(
+          info: result,
+          poster: await imageUrlToBase64(
             `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
-          )),
-      };
-    });
-});
-
-exports.searchMovie = functions.https.onCall((data, context) => {
-  const searchTerm = data.search;
-  return axios
-    .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
-    .then((res) => res.data)
-    .then((movie) => {
-      if (movie.Response === "False") {
-        return {
-          id: null,
+          ),
         };
-      }
-      const imdbId = movie.imdbID;
-      return {
-        id: imdbId,
-      };
-    });
-});
+      });
+  });
 
-exports.detectBadWordsInChat = functions.firestore
-  .document("messages/{msgId}")
+exports.movieInfoWithSearch = functions
+  .region("us-central1")
+  .https.onCall((data, context) => {
+    const searchTerm = data.search;
+    return axios
+      .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
+      .then((res) => res.data)
+      .then(async (movie) => {
+        if (movie.Response === "False") {
+          return {
+            info: null,
+            poster: null,
+          };
+        }
+        const imdbId = movie.imdbID;
+        const result = mapMovieInfo(movie);
+        return {
+          info: result,
+          poster:
+            result &&
+            (await imageUrlToBase64(
+              `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
+            )),
+        };
+      });
+  });
+
+exports.searchMovie = functions
+  .region("us-central1")
+  .https.onCall((data, context) => {
+    const searchTerm = data.search;
+    return axios
+      .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
+      .then((res) => res.data)
+      .then((movie) => {
+        if (movie.Response === "False") {
+          return {
+            id: null,
+          };
+        }
+        const imdbId = movie.imdbID;
+        return {
+          id: imdbId,
+        };
+      });
+  });
+
+exports.detectBadWordsInChat = functions
+  .region("asia-southeast1")
+  .firestore.document("messages/{msgId}")
   .onCreate((doc, ctx) => {
     const filter = new Filter();
     const { text } = doc.data();
@@ -110,8 +117,9 @@ exports.detectBadWordsInChat = functions.firestore
     }
   });
 
-exports.detectBadWordsInReview = functions.firestore
-  .document("reviews/{msgId}")
+exports.detectBadWordsInReview = functions
+  .region("asia-southeast1")
+  .firestore.document("reviews/{msgId}")
   .onCreate((doc, ctx) => {
     const filter = new Filter();
     const { text } = doc.data();
@@ -120,3 +128,5 @@ exports.detectBadWordsInReview = functions.firestore
       doc.ref.update({ text: cleaned });
     }
   });
+
+exports.myStorageFunction;
