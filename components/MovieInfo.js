@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import {
   addDoc,
   collection,
+  deleteDoc,
   orderBy,
   query,
   serverTimestamp,
@@ -81,6 +82,39 @@ const MovieInfo = ({ movieInfo, id }) => {
       setLoad(false);
     }
   };
+  // const watchListRef = collection(database, "watchlist");
+  // const q2 = query(watchListRef, where("movieId", "==", id), where("uid", "==", ));
+  // const [isInWatchList] = useCollectionData(q2);
+  // const addToWatchList = async (e) => {
+  //   e.preventDefault();
+  //   setLoad(true);
+  //   const { uid } = auth.currentUser;
+  //   try {
+  //     await addDoc(watchListRef, {
+  //       movieId: id,
+  //       uid,
+  //     });
+  //   } catch (e) {
+  //     unknownError();
+  //   } finally {
+  //     setLoad(false);
+  //   }
+  // };
+  // const removeFromWatchList = async (e) => {
+  //   e.preventDefault();
+  //   setLoad(true);
+  //   const { uid } = auth.currentUser;
+  //   try {
+  //     await deleteDoc(watchListRef, {
+  //       movieId: id,
+  //       uid,
+  //     });
+  //   } catch (e) {
+  //     unknownError();
+  //   } finally {
+  //     setLoad(false);
+  //   }
+  // };
 
   return (
     <div className="bg-white">

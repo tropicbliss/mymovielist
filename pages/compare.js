@@ -3,21 +3,13 @@ import Image from "next/image";
 import { getMovieInfo, getMovieInfoFromTitle } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
 
-const compare = () => {
+const compare = ({ startingInfo1, startingInfo2 }) => {
   const { setToast, setErrorMsg, unknownError } = useContext(GlobalContext);
   const [search1, setSearch1] = useState("");
   const [search2, setSearch2] = useState("");
-  const [movieInfo1, setMovieInfo1] = useState(null);
-  const [movieInfo2, setMovieInfo2] = useState(null);
+  const [movieInfo1, setMovieInfo1] = useState(startingInfo1);
+  const [movieInfo2, setMovieInfo2] = useState(startingInfo2);
   const { setLoad } = useContext(GlobalContext);
-  useEffect(() => {
-    getMovieInfo("tt10872600").then((e) => {
-      setMovieInfo1(e);
-    });
-    getMovieInfo("tt1745960").then((e) => {
-      setMovieInfo2(e);
-    });
-  }, []);
   useEffect(() => {
     if (movieInfo1 && movieInfo2) {
       setLoad(false);
@@ -230,6 +222,23 @@ const compare = () => {
       )}
     </>
   );
+};
+
+export const getServerSideProps = async () => {
+  try {
+    const startingInfo1 = await getMovieInfo("tt10872600");
+    const startingInfo2 = await getMovieInfo("tt1745960");
+    return {
+      props: {
+        startingInfo1,
+        startingInfo2,
+      },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default compare;

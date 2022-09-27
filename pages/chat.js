@@ -1,7 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
-import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import { database } from "../firebaseConfig";
 import {
   collection,
@@ -16,11 +15,12 @@ import navStyles from "../styles/Nav.module.css";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { classNames } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
+import AuthWarning from "../components/AuthWarning";
 
 const chat = () => {
   const [user] = useAuthState(auth);
 
-  return <section>{user ? <ChatRoom /> : <SignInWarning />}</section>;
+  return <section>{user ? <ChatRoom /> : <AuthWarning />}</section>;
 };
 
 function ChatRoom() {
@@ -101,29 +101,6 @@ function ChatMessage(props) {
       />
       <div className="inline-flex mx-3 items-center rounded-full bg-cyber-purple text-white px-5 py-2 overflow-scroll">
         {text}
-      </div>
-    </div>
-  );
-}
-
-function SignInWarning() {
-  return (
-    <div className="rounded-md bg-yellow-50 p-4">
-      <div className="flex">
-        <div className="flex-shrink-0">
-          <ExclamationTriangleIcon
-            className="h-5 w-5 text-yellow-400"
-            aria-hidden="true"
-          />
-        </div>
-        <div className="ml-3">
-          <h3 className="text-sm font-medium text-yellow-800">
-            Authentication needed
-          </h3>
-          <div className="mt-2 text-sm text-yellow-700">
-            <p>To access this chat feature, you need to be signed in.</p>
-          </div>
-        </div>
       </div>
     </div>
   );
