@@ -58,6 +58,7 @@ const Nav = () => {
     }
     setLoad(true);
     try {
+      setSearch("");
       const id = await getID(search);
       if (id === null) {
         setErrorMsg(
@@ -65,14 +66,12 @@ const Nav = () => {
           "We were unable to find the movie you were looking for."
         );
         setToast(true);
-        setSearch("");
         return;
       }
       router.push(`/moviedb/${id}`);
     } catch (e) {
       unknownError();
     } finally {
-      setSearch("");
       setLoad(false);
     }
   };

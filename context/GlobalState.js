@@ -36,8 +36,8 @@ export const GlobalProvider = ({ children }) => {
 
   function unknownError() {
     dispatch({
-      type: "SET_ERR_MSG",
-      payload: "An unknown error occurred",
+      type: "SET_ERROR_MSG",
+      payload: ["An unknown error occurred 😵‍💫", ""],
     });
     dispatch({
       type: "SET_TOAST",

@@ -8,6 +8,7 @@ import {
   addDoc,
   collection,
   deleteDoc,
+  getDocs,
   orderBy,
   query,
   serverTimestamp,
@@ -16,7 +17,6 @@ import {
 import { database } from "../firebaseConfig";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { format } from "date-fns";
-import Toast from "../components/Toast";
 import { GlobalContext } from "../context/GlobalState";
 
 function getStars(imdbRating) {
@@ -65,7 +65,7 @@ const MovieInfo = ({ movieInfo, id }) => {
       return;
     }
     setLoad(true);
-    const { displayName, photoURL, uid } = auth.currentUser;
+    const { displayName, photoURL, uid } = user;
     try {
       await addDoc(reviewsRef, {
         movieId: id,
@@ -82,39 +82,52 @@ const MovieInfo = ({ movieInfo, id }) => {
       setLoad(false);
     }
   };
-  // const watchListRef = collection(database, "watchlist");
-  // const q2 = query(watchListRef, where("movieId", "==", id), where("uid", "==", ));
-  // const [isInWatchList] = useCollectionData(q2);
-  // const addToWatchList = async (e) => {
-  //   e.preventDefault();
-  //   setLoad(true);
-  //   const { uid } = auth.currentUser;
-  //   try {
-  //     await addDoc(watchListRef, {
-  //       movieId: id,
-  //       uid,
-  //     });
-  //   } catch (e) {
-  //     unknownError();
-  //   } finally {
-  //     setLoad(false);
-  //   }
-  // };
-  // const removeFromWatchList = async (e) => {
-  //   e.preventDefault();
-  //   setLoad(true);
-  //   const { uid } = auth.currentUser;
-  //   try {
-  //     await deleteDoc(watchListRef, {
-  //       movieId: id,
-  //       uid,
-  //     });
-  //   } catch (e) {
-  //     unknownError();
-  //   } finally {
-  //     setLoad(false);
-  //   }
-  // };
+  const watchListRef = collection(database, "watchlist");
+  const [isInWatchList, setIsInWatchList] = useState(null);
+  useEffect(() => {
+    if (!user) {
+      setIsInWatchList(null);
+      return;
+    }
+    const q = query(
+      watchListRef,
+      where("movieId", "==", id),
+      where("uid", "==", user.uid)
+    );
+    setLoad(true);
+    getDocs(q)
+      .then((querySnapshot) => {
+        setIsInWatchList(!querySnapshot.empty);
+      })
+      .catch(() => {
+        unknownError();
+      })
+      .finally(() => {
+        setLoad(false);
+      });
+  }, [user]);
+  const handleWatchButton = async (e) => {
+    e.preventDefault();
+    setLoad(true);
+    try {
+      if (isInWatchList) {
+        await deleteDoc(watchListRef, {
+          movieId: id,
+          uid: user.uid,
+        });
+      } else {
+        await addDoc(watchListRef, {
+          movieId: id,
+          uid: user.uid,
+        });
+      }
+      setIsInWatchList(!isInWatchList);
+    } catch (e) {
+      unknownError();
+    } finally {
+      setLoad(false);
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -161,12 +174,17 @@ const MovieInfo = ({ movieInfo, id }) => {
             <p className="mt-6 text-gray-500">{movieInfo.info.Plot}</p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-              <button
-                type="button"
-                className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-              >
-                Add to watch list
-              </button>
+              {isInWatchList !== null && (
+                <button
+                  type="button"
+                  onClick={(e) => handleWatchButton(e)}
+                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                >
+                  {isInWatchList
+                    ? "Remove from watch list"
+                    : "Add to watch list"}
+                </button>
+              )}
               <a
                 href={imdbLink}
                 target="_blank"
@@ -205,7 +223,12 @@ const MovieInfo = ({ movieInfo, id }) => {
             {user && (
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
-                  <img className={navStyles.pfp} src={photoURL} alt="" />
+                  <img
+                    referrerPolicy="no-referrer"
+                    className={navStyles.pfp}
+                    src={photoURL}
+                    alt=""
+                  />
                 </div>
                 <div className="min-w-0 flex-1">
                   <form className="relative" onSubmit={sendReview}>
@@ -250,7 +273,12 @@ const MovieInfo = ({ movieInfo, id }) => {
               reviews.map((r, idx) => (
                 <div key={idx} className="flex space-x-4 text-sm text-gray-500">
                   <div className="flex-none py-10">
-                    <img src={r.photoURL} alt="" className={navStyles.pfp} />
+                    <img
+                      src={r.photoURL}
+                      alt=""
+                      className={navStyles.pfp}
+                      referrerPolicy="no-referrer"
+                    />
                   </div>
                   <div
                     className={classNames(

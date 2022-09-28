@@ -1,11 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Firebase API Keys
-firebaseConfig.js
-
-# OMDB and NewsAPI API keys
-/functions/apiKeys.js
-
 # dependencies
 /node_modules
 /.pnp
