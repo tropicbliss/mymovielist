@@ -1,6 +1,5 @@
 import { StarIcon } from "@heroicons/react/20/solid";
 import { classNames } from "../utilities";
-import navStyles from "../styles/Nav.module.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
 import { useContext, useEffect, useState } from "react";
