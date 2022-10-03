@@ -8,11 +8,12 @@ import {
   addDoc,
   collection,
   deleteDoc,
-  getDocs,
+  doc,
+  getDoc,
   orderBy,
   query,
   serverTimestamp,
-  where,
+  setDoc,
 } from "firebase/firestore";
 import { database } from "../firebaseConfig";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -43,12 +44,8 @@ const MovieInfo = ({ movieInfo, id }) => {
       : defaultPhotoURL
     : defaultPhotoURL;
   const [review, setReview] = useState("");
-  const reviewsRef = collection(database, "reviews");
-  const q = query(
-    reviewsRef,
-    orderBy("createdAt", "desc"),
-    where("movieId", "==", id)
-  );
+  const reviewsRef = collection(database, "reviews", id, "review");
+  const q = query(reviewsRef, orderBy("createdAt", "desc"));
   const [reviews] = useCollectionData(q);
   useEffect(() => {
     if (reviews === null) {
@@ -67,37 +64,30 @@ const MovieInfo = ({ movieInfo, id }) => {
     setLoad(true);
     const { displayName, photoURL, uid } = user;
     try {
-      await addDoc(reviewsRef, {
-        movieId: id,
-        text: review,
+      await addDoc(collection(database, "reviews", id, "review"), {
         createdAt: serverTimestamp(),
         displayName,
         photoURL,
+        text: review,
         uid,
       });
     } catch (e) {
       unknownError();
     } finally {
-      setReview("");
       setLoad(false);
     }
   };
-  const watchListRef = collection(database, "watchlist");
-  const [isInWatchList, setIsInWatchList] = useState(null);
+  const [isWatched, setIsWatched] = useState(null);
   useEffect(() => {
     if (!user) {
-      setIsInWatchList(null);
+      setIsWatched(null);
       return;
     }
-    const q = query(
-      watchListRef,
-      where("movieId", "==", id),
-      where("uid", "==", user.uid)
-    );
+    const watchedDocRef = doc(database, "watchlist", user.uid, "movies", id);
     setLoad(true);
-    getDocs(q)
-      .then((querySnapshot) => {
-        setIsInWatchList(!querySnapshot.empty);
+    getDoc(watchedDocRef)
+      .then((watchedDocSnap) => {
+        setIsWatched(watchedDocSnap.exists());
       })
       .catch(() => {
         unknownError();
@@ -106,22 +96,18 @@ const MovieInfo = ({ movieInfo, id }) => {
         setLoad(false);
       });
   }, [user]);
-  const handleWatchButton = async (e) => {
-    e.preventDefault();
+  const handleWatchListAction = async () => {
     setLoad(true);
+    const docRef = doc(database, "watchlist", user.uid, "movies", id);
     try {
-      if (isInWatchList) {
-        await deleteDoc(watchListRef, {
-          movieId: id,
-          uid: user.uid,
-        });
+      if (isWatched) {
+        await deleteDoc(docRef);
       } else {
-        await addDoc(watchListRef, {
-          movieId: id,
-          uid: user.uid,
+        await setDoc(docRef, {
+          movieTitle: movieInfo.info.Title,
         });
       }
-      setIsInWatchList(!isInWatchList);
+      setIsWatched(!isWatched);
     } catch (e) {
       unknownError();
     } finally {
@@ -174,15 +160,13 @@ const MovieInfo = ({ movieInfo, id }) => {
             <p className="mt-6 text-gray-500">{movieInfo.info.Plot}</p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-              {isInWatchList !== null && (
+              {isWatched !== null && (
                 <button
                   type="button"
-                  onClick={(e) => handleWatchButton(e)}
+                  onClick={() => handleWatchListAction()}
                   className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                 >
-                  {isInWatchList
-                    ? "Remove from watch list"
-                    : "Add to watch list"}
+                  {isWatched ? "Remove from watch list" : "Add to watch list"}
                 </button>
               )}
               <a
