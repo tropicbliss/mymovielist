@@ -85,36 +85,32 @@ const Compare = ({ startingInfo1, startingInfo2 }) => {
             {movieInfo2.info.Title}
           </h2>
         </div>
-        {movieInfo1.poster && (
-          <div className="p-3 flex justify-center">
-            {movieInfo1.poster ? (
-              <Image
-                className="rounded"
-                src={movieInfo1.poster}
-                height="182px"
-                width="146px"
-                alt={`Movie poster of ${movieInfo1.info.Title}`}
-              />
-            ) : (
-              <p>Image cannot be found</p>
-            )}
-          </div>
-        )}
-        {movieInfo2.poster && (
-          <div className="p-3 flex justify-center">
-            {movieInfo2.poster ? (
-              <Image
-                className="rounded"
-                src={movieInfo2.poster}
-                height="182px"
-                width="146px"
-                alt={`Movie poster of ${movieInfo2.info.Title}`}
-              />
-            ) : (
-              <p>Image cannot be found</p>
-            )}
-          </div>
-        )}
+        <div className="p-3 flex justify-center">
+          {movieInfo1.poster ? (
+            <Image
+              className="rounded"
+              src={movieInfo1.poster}
+              height="182px"
+              width="146px"
+              alt={`Movie poster of ${movieInfo1.info.Title}`}
+            />
+          ) : (
+            <p>Image cannot be loaded</p>
+          )}
+        </div>
+        <div className="p-3 flex justify-center">
+          {movieInfo2.poster ? (
+            <Image
+              className="rounded"
+              src={movieInfo2.poster}
+              height="182px"
+              width="146px"
+              alt={`Movie poster of ${movieInfo2.info.Title}`}
+            />
+          ) : (
+            <p>Image cannot be loaded</p>
+          )}
+        </div>
         <div className="p-3">
           <p className="text-center text-base sm:text-xl font-bold text-gray-900">
             {movieInfo1.info.Year ? movieInfo1.info.Year : "-"}

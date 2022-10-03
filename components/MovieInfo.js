@@ -124,7 +124,7 @@ const MovieInfo = ({ movieInfo, id }) => {
                   alt="Movie poster"
                 />
               ) : (
-                <p>Image cannot be found</p>
+                <p>Image cannot be loaded</p>
               )}
             </div>
           </div>
