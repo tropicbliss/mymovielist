@@ -9,10 +9,10 @@ import Toast from "./Toast";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import navStyles from "../styles/Nav.module.css";
 import { classNames } from "../utilities";
 import { LinearProgress } from "@mui/material";
 import { GlobalContext } from "../context/GlobalState";
+import Image from "next/image";
 
 async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
@@ -203,10 +203,13 @@ const Nav = () => {
                       <div>
                         <Menu.Button className="flex rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                           <span className="sr-only">Open user menu</span>
-                          <img
-                            className={navStyles.pfp}
+                          <Image
+                            layout="fixed"
+                            width="40px"
+                            height="40px"
                             src={photoURL}
-                            alt=""
+                            alt="Avatar of the user"
+                            style={{ borderRadius: "50%" }}
                             referrerPolicy="no-referrer"
                           />
                         </Menu.Button>
@@ -293,7 +296,15 @@ const Nav = () => {
                 {user && (
                   <div className="mb-3 flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className={navStyles.pfp} src={photoURL} alt="" />
+                      <Image
+                        layout="fixed"
+                        width="40px"
+                        height="40px"
+                        src={photoURL}
+                        alt="Avatar of the user"
+                        style={{ borderRadius: "50%" }}
+                        referrerPolicy="no-referrer"
+                      />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium text-white">

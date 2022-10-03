@@ -11,13 +11,13 @@ import {
   limitToLast,
 } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import navStyles from "../styles/Nav.module.css";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { classNames } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
 import AuthWarning from "../components/AuthWarning";
+import Image from "next/image";
 
-const chat = () => {
+const Chat = () => {
   const [user] = useAuthState(auth);
 
   return <section>{user ? <ChatRoom /> : <AuthWarning />}</section>;
@@ -94,9 +94,13 @@ function ChatMessage(props) {
         "flex items-center my-3"
       )}
     >
-      <img
-        className={navStyles.pfp}
+      <Image
+        layout="fixed"
+        width="40px"
+        height="40px"
         src={photoURL}
+        alt="Avatar of the user"
+        style={{ borderRadius: "50%" }}
         referrerPolicy="no-referrer"
       />
       <div className="inline-flex mx-3 items-center rounded-full bg-cyber-purple text-white px-5 py-2 overflow-scroll">
@@ -106,4 +110,4 @@ function ChatMessage(props) {
   );
 }
 
-export default chat;
+export default Chat;

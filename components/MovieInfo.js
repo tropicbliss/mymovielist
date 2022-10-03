@@ -19,6 +19,7 @@ import { database } from "../firebaseConfig";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { format } from "date-fns";
 import { GlobalContext } from "../context/GlobalState";
+import Image from "next/image";
 
 function getStars(imdbRating) {
   if (imdbRating === null) {
@@ -37,12 +38,6 @@ const MovieInfo = ({ movieInfo, id }) => {
   const stars = getStars(movieInfo.info.imdbRating);
   const imdbLink = `https://www.imdb.com/title/${id}/`;
   const [user] = useAuthState(auth);
-  const defaultPhotoURL = "https://i.stack.imgur.com/34AD2.jpg";
-  const photoURL = user
-    ? user.photoURL
-      ? user.photoURL
-      : defaultPhotoURL
-    : defaultPhotoURL;
   const [review, setReview] = useState("");
   const reviewsRef = collection(database, "reviews", id, "review");
   const q = query(reviewsRef, orderBy("createdAt", "desc"));
@@ -122,11 +117,16 @@ const MovieInfo = ({ movieInfo, id }) => {
         <div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
           <div className="lg:col-span-4 lg:row-end-1">
             <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg bg-gray-100">
-              <img
-                src={movieInfo.poster}
-                alt="Poster of the movie"
-                className="object-cover object-center"
-              />
+              {movieInfo.poster ? (
+                <Image
+                  className="object-cover object-center"
+                  src={movieInfo.poster}
+                  layout="fill"
+                  alt="Movie poster"
+                />
+              ) : (
+                <p>Image cannot be found</p>
+              )}
             </div>
           </div>
 
@@ -208,11 +208,14 @@ const MovieInfo = ({ movieInfo, id }) => {
             {user && (
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
-                  <img
+                  <Image
+                    layout="fixed"
+                    width="40px"
+                    height="40px"
+                    src={user.photoURL}
+                    alt="Avatar of the user"
+                    style={{ borderRadius: "50%" }}
                     referrerPolicy="no-referrer"
-                    className={navStyles.pfp}
-                    src={photoURL}
-                    alt=""
                   />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -258,10 +261,13 @@ const MovieInfo = ({ movieInfo, id }) => {
               reviews.map((r, idx) => (
                 <div key={idx} className="flex space-x-4 text-sm text-gray-500">
                   <div className="flex-none py-10">
-                    <img
+                    <Image
+                      layout="fixed"
+                      width="40px"
+                      height="40px"
                       src={r.photoURL}
-                      alt=""
-                      className={navStyles.pfp}
+                      alt="Avatar of the user"
+                      style={{ borderRadius: "50%" }}
                       referrerPolicy="no-referrer"
                     />
                   </div>

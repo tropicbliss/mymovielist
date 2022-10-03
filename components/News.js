@@ -18,11 +18,14 @@ const News = ({ articles }) => {
             >
               {post.image && (
                 <div className="flex-shrink-0">
-                  <img
-                    className="h-48 w-full object-cover"
-                    src={post.image}
-                    alt=""
-                  />
+                  <picture>
+                    <source srcSet={post.image} />
+                    <img
+                      className="h-48 w-full object-cover"
+                      src={post.image}
+                      alt="Picture accompanying the news headline"
+                    />
+                  </picture>
                 </div>
               )}
               <div className="flex flex-1 flex-col justify-between bg-white p-6">

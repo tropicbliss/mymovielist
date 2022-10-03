@@ -2,6 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-}
+  images: {
+    domains: ["lh3.googleusercontent.com", "i.stack.imgur.com"],
+  },
+};
 
-module.exports = nextConfig
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: false,
+});
+
+module.exports = withBundleAnalyzer(nextConfig);

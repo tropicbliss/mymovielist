@@ -75,6 +75,9 @@ const imageUrlToBase64 = async (url) => {
         ";base64," +
         buffer.toString("base64");
       return data;
+    })
+    .catch(() => {
+      return null;
     });
 };
 

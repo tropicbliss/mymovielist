@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getMovieInfo, getMovieInfoFromTitle } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
 
-const compare = ({ startingInfo1, startingInfo2 }) => {
+const Compare = ({ startingInfo1, startingInfo2 }) => {
   const { setToast, setErrorMsg, unknownError } = useContext(GlobalContext);
   const [search1, setSearch1] = useState("");
   const [search2, setSearch2] = useState("");
@@ -36,9 +36,9 @@ const compare = ({ startingInfo1, startingInfo2 }) => {
           "We were unable to find the movie you were looking for."
         );
         setToast(true);
-        return;
+      } else {
+        setMovieInfo(data);
       }
-      setMovieInfo(data);
     } catch (e) {
       unknownError();
     } finally {
@@ -87,24 +87,32 @@ const compare = ({ startingInfo1, startingInfo2 }) => {
         </div>
         {movieInfo1.poster && (
           <div className="p-3 flex justify-center">
-            <Image
-              className="rounded"
-              src={movieInfo1.poster}
-              height="182px"
-              width="146px"
-              alt={`Movie poster of ${movieInfo1.info.Title}`}
-            />
+            {movieInfo1.poster ? (
+              <Image
+                className="rounded"
+                src={movieInfo1.poster}
+                height="182px"
+                width="146px"
+                alt={`Movie poster of ${movieInfo1.info.Title}`}
+              />
+            ) : (
+              <p>Image cannot be found</p>
+            )}
           </div>
         )}
         {movieInfo2.poster && (
           <div className="p-3 flex justify-center">
-            <Image
-              className="rounded"
-              src={movieInfo2.poster}
-              height="182px"
-              width="146px"
-              alt={`Movie poster of ${movieInfo2.info.Title}`}
-            />
+            {movieInfo2.poster ? (
+              <Image
+                className="rounded"
+                src={movieInfo2.poster}
+                height="182px"
+                width="146px"
+                alt={`Movie poster of ${movieInfo2.info.Title}`}
+              />
+            ) : (
+              <p>Image cannot be found</p>
+            )}
           </div>
         )}
         <div className="p-3">
@@ -231,4 +239,4 @@ export const getServerSideProps = async () => {
   }
 };
 
-export default compare;
+export default Compare;
