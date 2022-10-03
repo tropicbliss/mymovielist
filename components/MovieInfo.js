@@ -71,6 +71,7 @@ const MovieInfo = ({ movieInfo, id }) => {
         text: review,
         uid,
       });
+      setReview("");
     } catch (e) {
       unknownError();
     } finally {
