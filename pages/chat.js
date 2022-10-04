@@ -14,13 +14,24 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { classNames } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
-import AuthWarning from "../components/AuthWarning";
+import Warning from "../components/Warning";
 import Image from "next/image";
 
 const Chat = () => {
   const [user] = useAuthState(auth);
 
-  return <section>{user ? <ChatRoom /> : <AuthWarning />}</section>;
+  return (
+    <section>
+      {user ? (
+        <ChatRoom />
+      ) : (
+        <Warning
+          title="Authentication needed"
+          description="To access this chat feature, you need to be signed in."
+        />
+      )}
+    </section>
+  );
 };
 
 function ChatRoom() {

@@ -3,10 +3,10 @@ import { getNews } from "../utilities";
 
 export default function Home({ articles }) {
   return (
-    <>
+    <div className="mx-4">
       <Hero />
       <News articles={articles} isShowTitle={true} />
-    </>
+    </div>
   );
 }
 
@@ -28,10 +28,16 @@ function Hero() {
 }
 
 export const getServerSideProps = async () => {
-  const articles = await getNews();
-  return {
-    props: {
-      articles,
-    },
-  };
+  try {
+    const articles = await getNews(1);
+    return {
+      props: {
+        articles,
+      },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
 };

@@ -1,6 +1,6 @@
 const News = ({ articles }) => {
   return (
-    <div className="relative bg-gray-50 px-4 sm:px-6 mt-8 sm:mt-16 lg:px-8 lg:pb-28">
+    <div className="relative bg-gray-50 sm:px-6 mt-8 sm:mt-16 lg:px-8 lg:pb-28">
       <div className="absolute inset-0">
         <div className="h-1/3 bg-white sm:h-2/3" />
       </div>

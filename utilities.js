@@ -1,9 +1,9 @@
 import { httpsCallable } from "firebase/functions";
 import { functions } from "./firebaseConfig";
 
-export const getNews = async () => {
+export const getNews = async (page) => {
   const newsEndpoint = httpsCallable(functions, "news");
-  const articles = await (await newsEndpoint()).data.articles;
+  const articles = await (await newsEndpoint({ page })).data.articles;
   return articles;
 };
 

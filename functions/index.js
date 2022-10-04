@@ -14,13 +14,14 @@ const INITIAL_OMDB_URL = "http://www.omdbapi.com/?apikey=";
 const api = new NewsApi(NEWS_API_KEY);
 
 exports.news = functions.region("us-central1").https.onCall((data, context) => {
+  const page = data.page;
   return api.v2
     .topHeadlines({
       country: "us",
       category: "entertainment",
       q: "",
       pageSize: 20,
-      page: 1,
+      page,
     })
     .then((result) => {
       if (!result.articles) {

@@ -1,6 +1,6 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 
-const AuthWarning = () => {
+const Warning = ({ title, description }) => {
   return (
     <div className="rounded-md bg-yellow-50 p-4">
       <div className="flex">
@@ -11,11 +11,9 @@ const AuthWarning = () => {
           />
         </div>
         <div className="ml-3">
-          <h3 className="text-sm font-medium text-yellow-800">
-            Authentication needed
-          </h3>
+          <h3 className="text-sm font-medium text-yellow-800">{title}</h3>
           <div className="mt-2 text-sm text-yellow-700">
-            <p>To access this chat feature, you need to be signed in.</p>
+            <p>{description}</p>
           </div>
         </div>
       </div>
@@ -23,4 +21,4 @@ const AuthWarning = () => {
   );
 };
 
-export default AuthWarning;
+export default Warning;
