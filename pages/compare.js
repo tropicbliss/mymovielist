@@ -53,7 +53,7 @@ const Compare = ({ startingInfo1, startingInfo2 }) => {
         Compare movies
       </h1>
       <div className="grid grid-cols-2 space-x-3">
-        <div className="relative mt-1 rounded-md shadow-sm">
+        <div className="relative mt-1 mb-3 rounded-md shadow-sm">
           <form onSubmit={(e) => onSubmit(e, 1)}>
             <input
               type="text"
@@ -64,7 +64,7 @@ const Compare = ({ startingInfo1, startingInfo2 }) => {
             />
           </form>
         </div>
-        <div className="relative mt-1 rounded-md shadow-sm">
+        <div className="relative mt-1 mb-3 rounded-md shadow-sm">
           <form onSubmit={(e) => onSubmit(e, 2)}>
             <input
               type="text"
