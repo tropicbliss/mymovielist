@@ -122,6 +122,7 @@ const MovieInfo = ({ movieInfo, id }) => {
                   src={movieInfo.poster}
                   layout="fill"
                   alt="Movie poster"
+                  priority
                 />
               ) : (
                 <p>Image cannot be loaded</p>
@@ -215,6 +216,7 @@ const MovieInfo = ({ movieInfo, id }) => {
                     alt="Avatar of the user"
                     style={{ borderRadius: "50%" }}
                     referrerPolicy="no-referrer"
+                    priority
                   />
                 </div>
                 <div className="min-w-0 flex-1">

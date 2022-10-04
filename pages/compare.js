@@ -93,6 +93,7 @@ const Compare = ({ startingInfo1, startingInfo2 }) => {
               height="182px"
               width="146px"
               alt={`Movie poster of ${movieInfo1.info.Title}`}
+              priority
             />
           ) : (
             <p>Image cannot be loaded</p>
@@ -106,6 +107,7 @@ const Compare = ({ startingInfo1, startingInfo2 }) => {
               height="182px"
               width="146px"
               alt={`Movie poster of ${movieInfo2.info.Title}`}
+              priority
             />
           ) : (
             <p>Image cannot be loaded</p>

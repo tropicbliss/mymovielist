@@ -211,6 +211,7 @@ const Nav = () => {
                             alt="Avatar of the user"
                             style={{ borderRadius: "50%" }}
                             referrerPolicy="no-referrer"
+                            priority
                           />
                         </Menu.Button>
                       </div>
@@ -304,6 +305,7 @@ const Nav = () => {
                         alt="Avatar of the user"
                         style={{ borderRadius: "50%" }}
                         referrerPolicy="no-referrer"
+                        priority
                       />
                     </div>
                     <div className="ml-3">

@@ -113,6 +113,7 @@ function ChatMessage(props) {
         alt="Avatar of the user"
         style={{ borderRadius: "50%" }}
         referrerPolicy="no-referrer"
+        priority
       />
       <div className="inline-flex mx-3 items-center rounded-full bg-cyber-purple text-white px-5 py-2 overflow-scroll">
         {text}
