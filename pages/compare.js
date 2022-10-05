@@ -166,8 +166,8 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
       <h1 className="text-center mb-16 text-4xl sm:text-5xl font-bold tracking-tight text-gray-900">
         Compare movies
       </h1>
-      <div className="grid lg:grid-cols-3 space-y-3 lg:space-y-0 grid-rows-3 lg:space-x-3 mb-3 lg:mb-0">
-        <div className="relative mt-1 rounded-md shadow-sm">
+      <div className="grid lg:grid-cols-3 grid-rows-3 lg:space-x-3">
+        <div className="relative mt-1 rounded-md shadow-sm mb-3 lg:mb-0">
           <form onSubmit={(e) => onSubmit(e, 1)}>
             <input
               type="text"
@@ -178,7 +178,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
             />
           </form>
         </div>
-        <div className="relative mt-1 rounded-md shadow-sm">
+        <div className="relative mt-1 rounded-md shadow-sm mb-3 lg:mb-0">
           <form onSubmit={(e) => onSubmit(e, 2)}>
             <input
               type="text"
@@ -189,7 +189,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
             />
           </form>
         </div>
-        <div className="relative mt-1 rounded-md shadow-sm">
+        <div className="relative mt-1 rounded-md shadow-sm mb-3 lg:mb-0">
           <form onSubmit={(e) => onSubmit(e, 3)}>
             <input
               type="text"
