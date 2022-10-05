@@ -17,7 +17,7 @@ export const getMovieInfo = async (imdbId) => {
 };
 
 export const getID = async (title) => {
-  const searchEndpoint = httpsCallable(functions, "searchMovie");
+  const searchEndpoint = httpsCallable(functions, "movieInfoWithSearch");
   const id = await (await searchEndpoint({ search: title })).data.id;
   return id;
 };
@@ -31,6 +31,7 @@ export const getMovieInfoFromTitle = async (title) => {
   return {
     info: data.info,
     poster: data.poster,
+    id: data.id,
   };
 };
 

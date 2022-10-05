@@ -74,14 +74,14 @@ function ChatRoom() {
           messages.map((msg, idx) => <ChatMessage key={idx} message={msg} />)}
         <div ref={dummy}></div>
       </div>
-      <form className="flex" onSubmit={sendMessage}>
+      <form className="flex space-x-1 sm:space-x-3" onSubmit={sendMessage}>
         <input
           value={formValue}
           onChange={(e) => setFormValue(e.target.value)}
           placeholder="Say something nice"
           className="w-full rounded-md border border-gray-300 px-5 py-3 placeholder-gray-400 shadow-sm focus:border-cyber-purple focus:ring-1 focus:ring-cyber-purple"
         />
-        <div className="mt-3 rounded-md sm:mt-0 sm:ml-3 sm:flex-shrink-0">
+        <div className="mt-3 rounded-md sm:mt-0 sm:flex-shrink-0">
           <button
             type="submit"
             className="inline-flex items-center rounded-full border border-transparent bg-cyber-purple p-3 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

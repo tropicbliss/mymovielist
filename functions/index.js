@@ -71,6 +71,7 @@ exports.movieInfoWithSearch = functions
           return {
             info: null,
             poster: null,
+            id: null,
           };
         }
         const imdbId = movie.imdbID;
@@ -82,25 +83,6 @@ exports.movieInfoWithSearch = functions
             (await imageUrlToBase64(
               `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
             )),
-        };
-      });
-  });
-
-exports.searchMovie = functions
-  .region("us-central1")
-  .https.onCall((data, context) => {
-    const searchTerm = data.search;
-    return axios
-      .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
-      .then((res) => res.data)
-      .then((movie) => {
-        if (movie.Response === "False") {
-          return {
-            id: null,
-          };
-        }
-        const imdbId = movie.imdbID;
-        return {
           id: imdbId,
         };
       });
