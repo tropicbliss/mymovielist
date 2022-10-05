@@ -44,10 +44,10 @@ function ChatRoom() {
   const [formValue, setFormValue] = useState("");
   const sendMessage = async (e) => {
     e.preventDefault();
-    setFormValue(formValue.trim());
-    if (formValue === "") {
+    if (formValue.trim() === "") {
       setErrorMsg("Error sending message", "Message cannot be empty.");
       setToast(true);
+      setFormValue("");
       return;
     }
     setLoad(true);
