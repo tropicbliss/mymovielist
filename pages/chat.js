@@ -59,13 +59,13 @@ function ChatRoom() {
         uid,
         photoURL,
       });
+      dummy.current.scrollIntoView({ behavior: "smooth" });
     } catch (e) {
       unknownError();
     } finally {
       setFormValue("");
       setLoad(false);
     }
-    dummy.current.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
