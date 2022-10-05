@@ -84,7 +84,7 @@ export const getServerSideProps = async (context) => {
   try {
     const id = context.params.id;
     const page = Math.floor(id);
-    if (page <= 0 || page > 3) {
+    if (page <= 0 || page > 3 || !page) {
       return {
         notFound: true,
       };
