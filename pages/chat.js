@@ -44,6 +44,7 @@ function ChatRoom() {
   const [formValue, setFormValue] = useState("");
   const sendMessage = async (e) => {
     e.preventDefault();
+    setFormValue(formValue.trim());
     if (formValue === "") {
       setErrorMsg("Error sending message", "Message cannot be empty.");
       setToast(true);
@@ -77,7 +78,7 @@ function ChatRoom() {
       <form className="flex space-x-1 sm:space-x-3" onSubmit={sendMessage}>
         <input
           value={formValue}
-          onChange={(e) => setFormValue(e.target.value.trim())}
+          onChange={(e) => setFormValue(e.target.value)}
           placeholder="Say something nice"
           className="w-full rounded-md border border-gray-300 px-5 py-3 placeholder-gray-400 shadow-sm focus:border-cyber-purple focus:ring-1 focus:ring-cyber-purple"
         />
