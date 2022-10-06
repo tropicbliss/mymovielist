@@ -228,15 +228,16 @@ const Nav = () => {
                           {user && (
                             <Menu.Item>
                               {({ active }) => (
-                                <a
-                                  href="#"
-                                  className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
-                                  )}
-                                >
-                                  Your Profile
-                                </a>
+                                <Link href="/dashboard">
+                                  <a
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    Dashboard
+                                  </a>
+                                </Link>
                               )}
                             </Menu.Item>
                           )}
@@ -322,9 +323,10 @@ const Nav = () => {
                   {user && (
                     <Disclosure.Button
                       as="a"
+                      href="/dashboard"
                       className="cursor-pointer block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                     >
-                      Your Profile
+                      Dashboard
                     </Disclosure.Button>
                   )}
                   <Disclosure.Button
