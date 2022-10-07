@@ -292,14 +292,14 @@ function WatchedModal(props) {
     );
     setLoad(true);
     try {
-      await Promise.all(
+      await Promise.all([
         setDoc(completedRef, {
           movieTitle: initialOpen.movieTitle,
           userRanking: stars,
           completedAt: serverTimestamp(),
         }),
-        deleteDoc(deletedRef)
-      );
+        deleteDoc(deletedRef),
+      ]);
     } catch (e) {
       unknownError();
       console.log(e);
