@@ -71,6 +71,7 @@ const Nav = () => {
       router.push(`/moviedb/${id}`);
     } catch (e) {
       unknownError();
+      console.log(e);
     } finally {
       setLoad(false);
     }

@@ -46,6 +46,7 @@ const MovieInfo = ({ movieInfo, id }) => {
   }, [loading]);
   if (error) {
     unknownError();
+    console.log(error);
   }
   useEffect(() => {
     if (reviews === null) {
@@ -74,6 +75,7 @@ const MovieInfo = ({ movieInfo, id }) => {
       setReview("");
     } catch (e) {
       unknownError();
+      console.log(e);
     } finally {
       setLoad(false);
     }
@@ -90,8 +92,9 @@ const MovieInfo = ({ movieInfo, id }) => {
       .then((watchedDocSnap) => {
         setIsWatched(watchedDocSnap.exists());
       })
-      .catch(() => {
+      .catch((e) => {
         unknownError();
+        console.log(e);
       })
       .finally(() => {
         setLoad(false);
@@ -104,6 +107,24 @@ const MovieInfo = ({ movieInfo, id }) => {
       if (isWatched) {
         await deleteDoc(docRef);
       } else {
+        const completedListRef = doc(
+          database,
+          "completedList",
+          user.uid,
+          "movies",
+          id
+        );
+        const isInCompletedList = await (
+          await getDoc(completedListRef)
+        ).exists();
+        if (isInCompletedList) {
+          setErrorMsg(
+            "Error adding movie to watch list",
+            "You have already watched the movie."
+          );
+          setToast(true);
+          return;
+        }
         await setDoc(docRef, {
           movieTitle: movieInfo.info.Title,
         });
@@ -111,6 +132,7 @@ const MovieInfo = ({ movieInfo, id }) => {
       setIsWatched(!isWatched);
     } catch (e) {
       unknownError();
+      console.log(e);
     } finally {
       setLoad(false);
     }

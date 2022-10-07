@@ -1,3 +1,5 @@
+// Beware, for spaghetti code galore
+
 import { auth, database } from "../firebaseConfig";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Warning from "../components/Warning";
@@ -290,14 +292,17 @@ function WatchedModal(props) {
     );
     setLoad(true);
     try {
-      await setDoc(completedRef, {
-        movieTitle: initialOpen.movieTitle,
-        userRanking: stars,
-        completedAt: serverTimestamp(),
-      });
-      await deleteDoc(deletedRef);
+      await Promise.all(
+        setDoc(completedRef, {
+          movieTitle: initialOpen.movieTitle,
+          userRanking: stars,
+          completedAt: serverTimestamp(),
+        }),
+        deleteDoc(deletedRef)
+      );
     } catch (e) {
       unknownError();
+      console.log(e);
     } finally {
       setLoad(false);
     }

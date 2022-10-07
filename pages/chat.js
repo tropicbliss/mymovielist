@@ -46,6 +46,7 @@ function ChatRoom() {
   }, [loading]);
   if (error) {
     unknownError();
+    console.log(error);
   }
   const [formValue, setFormValue] = useState("");
   const sendMessage = async (e) => {
@@ -68,6 +69,7 @@ function ChatRoom() {
       dummy.current.scrollIntoView({ behavior: "smooth" });
     } catch (e) {
       unknownError();
+      console.log(e);
     } finally {
       setFormValue("");
       setLoad(false);
