@@ -40,7 +40,13 @@ const MovieInfo = ({ movieInfo, id }) => {
   const [review, setReview] = useState("");
   const reviewsRef = collection(database, "reviews", id, "review");
   const q = query(reviewsRef, orderBy("createdAt", "desc"));
-  const [reviews] = useCollectionData(q);
+  const [reviews, loading, error] = useCollectionData(q);
+  useEffect(() => {
+    setLoad(loading);
+  }, [loading]);
+  if (error) {
+    unknownError();
+  }
   useEffect(() => {
     if (reviews === null) {
       setLoad(true);
@@ -258,7 +264,7 @@ const MovieInfo = ({ movieInfo, id }) => {
                 </div>
               </div>
             )}
-            {reviews &&
+            {!loading &&
               reviews.map((r, idx) => (
                 <div key={idx} className="flex space-x-4 text-sm text-gray-500">
                   <div className="flex-none py-10">

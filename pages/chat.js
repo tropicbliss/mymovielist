@@ -40,7 +40,13 @@ function ChatRoom() {
   const dummy = useRef();
   const messagesRef = collection(database, "messages");
   const q = query(messagesRef, orderBy("createdAt"), limitToLast(25));
-  const [messages] = useCollectionData(q);
+  const [messages, loading, error] = useCollectionData(q);
+  useEffect(() => {
+    setLoad(loading);
+  }, [loading]);
+  if (error) {
+    unknownError();
+  }
   const [formValue, setFormValue] = useState("");
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -71,7 +77,7 @@ function ChatRoom() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div>
-        {messages &&
+        {!loading &&
           messages.map((msg, idx) => <ChatMessage key={idx} message={msg} />)}
         <div ref={dummy}></div>
       </div>
