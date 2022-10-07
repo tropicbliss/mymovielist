@@ -5,7 +5,15 @@ import { PlusIcon, StarIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { classNames } from "../utilities";
 import { useContext, useEffect, useRef, useState, Fragment } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { GlobalContext } from "../context/GlobalState";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
@@ -16,7 +24,7 @@ const dashboard = () => {
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 mt-3">
       {user ? (
-        <Dashboard noMovies={false} user={user} />
+        <Dashboard user={user} />
       ) : (
         <Warning
           title="Authentication needed"
@@ -28,7 +36,7 @@ const dashboard = () => {
 };
 
 function Dashboard(props) {
-  const { noMovies, user } = props;
+  const { user } = props;
   const [isInWatchList, setIsInWatchList] = useState(true);
   const tabs = [
     { name: "Watch List", href: "#", current: isInWatchList },
@@ -135,13 +143,13 @@ function NoMovie() {
 }
 
 function WatchList(props) {
-  const { setToast, setErrorMsg, unknownError, setLoad } =
-    useContext(GlobalContext);
+  const { setLoad } = useContext(GlobalContext);
   const { user } = props;
   const [watchlist, setWatchlist] = useState(null);
   useEffect(() => {
     const watchlistRef = collection(database, "watchlist", user.uid, "movies");
     const result = [];
+    setLoad(true);
     getDocs(watchlistRef)
       .then((res) => {
         res.forEach((movie) => {
@@ -151,9 +159,14 @@ function WatchList(props) {
       .catch(() => {})
       .finally(() => {
         setWatchlist(result);
+        setLoad(false);
       });
   }, [user]);
   const [openModal, setOpenModal] = useState(null);
+  const resetField = () => {
+    setWatchlist(watchlist.filter((movie) => movie.id !== openModal.id));
+    setOpenModal(null);
+  };
 
   if (watchlist === null) {
     return <></>;
@@ -164,7 +177,7 @@ function WatchList(props) {
       <div className="px-4 sm:px-6 lg:px-8">
         <WatchedModal
           initialOpen={openModal}
-          resetField={() => setOpenModal(null)}
+          resetField={() => resetField()}
           uid={user.uid}
         />
         <div className="mt-8 flex flex-col">
@@ -252,6 +265,7 @@ function WatchList(props) {
 }
 
 function WatchedModal(props) {
+  const { setLoad, unknownError } = useContext(GlobalContext);
   const { initialOpen, resetField, uid } = props;
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -259,6 +273,35 @@ function WatchedModal(props) {
   }, [initialOpen]);
   const cancelButtonRef = useRef(null);
   const [stars, setStars] = useState(1);
+  const submitMovie = async () => {
+    const completedRef = doc(
+      database,
+      "completedList",
+      uid,
+      "movies",
+      initialOpen.id
+    );
+    const deletedRef = doc(
+      database,
+      "watchlist",
+      uid,
+      "movies",
+      initialOpen.id
+    );
+    setLoad(true);
+    try {
+      await setDoc(completedRef, {
+        movieTitle: initialOpen.movieTitle,
+        userRanking: stars,
+        completedAt: serverTimestamp(),
+      });
+      await deleteDoc(deletedRef);
+    } catch (e) {
+      unknownError();
+    } finally {
+      setLoad(false);
+    }
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -335,6 +378,7 @@ function WatchedModal(props) {
                     onClick={() => {
                       resetField();
                       setStars(1);
+                      submitMovie();
                     }}
                   >
                     Rate Movie
