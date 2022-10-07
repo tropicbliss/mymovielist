@@ -10,6 +10,14 @@ export default (state, action) => {
         ...state,
         errorTitle: action.payload[0],
         errorMsg: action.payload[1],
+        isError: true,
+      };
+    case "SET_NICE_MSG":
+      return {
+        ...state,
+        errorTitle: action.payload[0],
+        errorMsg: action.payload[1],
+        isError: false,
       };
     case "SET_TOAST":
       return {

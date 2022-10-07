@@ -99,7 +99,7 @@ const MovieInfo = ({ movieInfo, id }) => {
       .finally(() => {
         setLoad(false);
       });
-  }, [user]);
+  }, [user, id]);
   const handleWatchListAction = async () => {
     setLoad(true);
     const docRef = doc(database, "watchlist", user.uid, "movies", id);

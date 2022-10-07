@@ -43,6 +43,7 @@ const Nav = () => {
     setToast,
     unknownError,
     errorTitle,
+    isError,
   } = useContext(GlobalContext);
   const [search, setSearch] = useState("");
   const router = useRouter();
@@ -112,7 +113,7 @@ const Nav = () => {
       <Toast
         show={showToast}
         setShow={setToast}
-        isSuccess={false}
+        isSuccess={!isError}
         title={errorTitle}
         description={errorMsg}
       />

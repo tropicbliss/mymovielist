@@ -19,6 +19,7 @@ import {
 import { GlobalContext } from "../context/GlobalState";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import MovieList from "../components/MovieList";
 
 const dashboard = () => {
   const [user] = useAuthState(auth);
@@ -38,15 +39,38 @@ const dashboard = () => {
 };
 
 function Dashboard(props) {
+  const { setToast, setNiceMsg } = useContext(GlobalContext);
   const { user } = props;
   const [isInWatchList, setIsInWatchList] = useState(true);
   const tabs = [
-    { name: "Watch List", href: "#", current: isInWatchList },
-    { name: "Completed", href: "#", current: !isInWatchList },
+    { name: "Watch List", current: isInWatchList },
+    { name: "Completed", current: !isInWatchList },
   ];
+  const share = () => {
+    if (typeof window !== "undefined") {
+      const url = document.location.origin + "/movielist/" + user.uid;
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "MyMovieList",
+            text: "Check out MyMovieList.",
+            url,
+          })
+          .then(() => console.log("Successful share"))
+          .catch((error) => console.log("Error sharing", error));
+      } else {
+        navigator.clipboard.writeText(url);
+        setNiceMsg(
+          "Your browser does not support the Web Share API",
+          "Your movie list URL is automatically copied to your clipboard."
+        );
+        setToast(true);
+      }
+    }
+  };
 
   return (
-    <div className="relative border-b border-gray-200 pb-5 sm:pb-0">
+    <div className="relative border-b border-gray-200 pb-5 sm:pb-0 mt-3 sm:mt-9">
       <div className="md:flex md:items-center md:justify-between">
         <h3 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
           Dashboard
@@ -55,6 +79,7 @@ function Dashboard(props) {
           {!isInWatchList && (
             <button
               type="button"
+              onClick={share}
               className="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Share
@@ -72,6 +97,7 @@ function Dashboard(props) {
             name="current-tab"
             className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             defaultValue={tabs.find((tab) => tab.current).name}
+            onChange={(e) => setIsInWatchList(e.target.value === "Watch List")}
           >
             {tabs.map((tab) => (
               <option key={tab.name}>{tab.name}</option>
@@ -98,7 +124,11 @@ function Dashboard(props) {
           </nav>
         </div>
       </div>
-      {isInWatchList ? <WatchList user={user} /> : <p>Completed</p>}
+      {isInWatchList ? (
+        <WatchList user={user} changeTabs={() => setIsInWatchList(false)} />
+      ) : (
+        <MovieList uid={user.uid} showName={false} />
+      )}
     </div>
   );
 }
@@ -146,7 +176,7 @@ function NoMovie() {
 
 function WatchList(props) {
   const { setLoad } = useContext(GlobalContext);
-  const { user } = props;
+  const { user, changeTabs } = props;
   const [watchlist, setWatchlist] = useState(null);
   useEffect(() => {
     const watchlistRef = collection(database, "watchlist", user.uid, "movies");
@@ -168,6 +198,7 @@ function WatchList(props) {
   const resetField = () => {
     setWatchlist(watchlist.filter((movie) => movie.id !== openModal.id));
     setOpenModal(null);
+    changeTabs();
   };
 
   if (watchlist === null) {
@@ -180,7 +211,7 @@ function WatchList(props) {
         <WatchedModal
           initialOpen={openModal}
           resetField={() => resetField()}
-          uid={user.uid}
+          user={user}
         />
         <div className="mt-8 flex flex-col">
           <div className="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
@@ -268,7 +299,7 @@ function WatchList(props) {
 
 function WatchedModal(props) {
   const { setLoad, unknownError } = useContext(GlobalContext);
-  const { initialOpen, resetField, uid } = props;
+  const { initialOpen, resetField, user } = props;
   const [open, setOpen] = useState(false);
   useEffect(() => {
     setOpen(Boolean(initialOpen));
@@ -279,17 +310,18 @@ function WatchedModal(props) {
     const completedRef = doc(
       database,
       "completedList",
-      uid,
+      user.uid,
       "movies",
       initialOpen.id
     );
     const deletedRef = doc(
       database,
       "watchlist",
-      uid,
+      user.uid,
       "movies",
       initialOpen.id
     );
+    const userRef = doc(database, "completedList", user.uid);
     setLoad(true);
     try {
       await Promise.all([
@@ -298,6 +330,13 @@ function WatchedModal(props) {
           userRanking: stars,
           completedAt: serverTimestamp(),
         }),
+        setDoc(
+          userRef,
+          {
+            displayName: user.displayName,
+          },
+          { merge: true }
+        ),
         deleteDoc(deletedRef),
       ]);
     } catch (e) {

@@ -6,6 +6,7 @@ const initialState = {
   errorTitle: "",
   errorMsg: "",
   showToast: false,
+  isError: true,
 };
 
 export const GlobalContext = createContext(initialState);
@@ -24,6 +25,13 @@ export const GlobalProvider = ({ children }) => {
     dispatch({
       type: "SET_ERROR_MSG",
       payload: [errorTitle, errorMsg],
+    });
+  }
+
+  function setNiceMsg(title, description) {
+    dispatch({
+      type: "SET_NICE_MSG",
+      payload: [title, description],
     });
   }
 
@@ -52,10 +60,12 @@ export const GlobalProvider = ({ children }) => {
         errorMsg: state.errorMsg,
         showToast: state.showToast,
         errorTitle: state.errorTitle,
+        isError: state.isError,
         setLoad,
         setErrorMsg,
         setToast,
         unknownError,
+        setNiceMsg,
       }}
     >
       {children}
