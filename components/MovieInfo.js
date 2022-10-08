@@ -237,7 +237,10 @@ const MovieInfo = ({ movieInfo, id }) => {
             {user && (
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
-                  <Avatar profileURL={user.photoURL} />
+                  <Avatar
+                    profileURL={user.photoURL}
+                    initials={user.displayName.charAt(0).toUpperCase()}
+                  />
                 </div>
                 <div className="min-w-0 flex-1">
                   <form className="relative" onSubmit={sendReview}>
@@ -282,7 +285,10 @@ const MovieInfo = ({ movieInfo, id }) => {
               reviews.map((r, idx) => (
                 <div key={idx} className="flex space-x-4 text-sm text-gray-500">
                   <div className="flex-none py-10">
-                    <Avatar profileURL={r.photoURL} />
+                    <Avatar
+                      profileURL={r.photoURL}
+                      initials={user.displayName.charAt().toUpperCase()}
+                    />
                   </div>
                   <div
                     className={classNames(

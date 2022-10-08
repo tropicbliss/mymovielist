@@ -202,8 +202,7 @@ const Nav = () => {
                           <Avatar
                             profileURL={user && user.photoURL}
                             initials={
-                              (user && user.photoURL) ||
-                              user.displayName.charAt(0).toUpperCase()
+                              user && user.displayName.charAt(0).toUpperCase()
                             }
                           />
                         </Menu.Button>
@@ -293,8 +292,7 @@ const Nav = () => {
                       <Avatar
                         profileURL={user && user.photoURL}
                         initials={
-                          (user && user.photoURL) ||
-                          user.displayName.charAt(0).toUpperCase()
+                          user && user.displayName.charAt(0).toUpperCase()
                         }
                       />
                     </div>

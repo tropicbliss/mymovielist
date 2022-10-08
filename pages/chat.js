@@ -118,7 +118,7 @@ function ChatMessage(props) {
     >
       <Avatar
         profileURL={photoURL}
-        initials={photoURL || displayName.charAt(0).toUpperCase()}
+        initials={displayName.charAt(0).toUpperCase()}
       />
       <div className="inline-flex mx-3 items-center rounded-full bg-cyber-purple text-white px-5 py-2 overflow-scroll">
         {text}
