@@ -21,13 +21,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import MovieList from "../components/MovieList";
 
-const dashboard = () => {
+const Dashboard = () => {
   const [user] = useAuthState(auth);
 
   return (
     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 mt-3">
       {user ? (
-        <Dashboard user={user} />
+        <Dash user={user} />
       ) : (
         <Warning
           title="Authentication needed"
@@ -38,7 +38,7 @@ const dashboard = () => {
   );
 };
 
-function Dashboard(props) {
+function Dash(props) {
   const { setToast, setNiceMsg } = useContext(GlobalContext);
   const { user } = props;
   const [isInWatchList, setIsInWatchList] = useState(true);
@@ -448,4 +448,4 @@ function WatchedModal(props) {
   );
 }
 
-export default dashboard;
+export default Dashboard;
