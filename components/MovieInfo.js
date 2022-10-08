@@ -19,6 +19,7 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { format } from "date-fns";
 import { GlobalContext } from "../context/GlobalState";
 import Image from "next/image";
+import Avatar from "./Avatar";
 
 function getStars(imdbRating) {
   if (imdbRating === null) {
@@ -236,16 +237,7 @@ const MovieInfo = ({ movieInfo, id }) => {
             {user && (
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
-                  <Image
-                    layout="fixed"
-                    width="40px"
-                    height="40px"
-                    src={user.photoURL}
-                    alt="Avatar of the user"
-                    style={{ borderRadius: "50%" }}
-                    referrerPolicy="no-referrer"
-                    priority
-                  />
+                  <Avatar profileURL={user.photoURL} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <form className="relative" onSubmit={sendReview}>
@@ -290,15 +282,7 @@ const MovieInfo = ({ movieInfo, id }) => {
               reviews.map((r, idx) => (
                 <div key={idx} className="flex space-x-4 text-sm text-gray-500">
                   <div className="flex-none py-10">
-                    <Image
-                      layout="fixed"
-                      width="40px"
-                      height="40px"
-                      src={r.photoURL}
-                      alt="Avatar of the user"
-                      style={{ borderRadius: "50%" }}
-                      referrerPolicy="no-referrer"
-                    />
+                    <Avatar profileURL={r.photoURL} />
                   </div>
                   <div
                     className={classNames(

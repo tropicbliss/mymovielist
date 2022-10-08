@@ -12,7 +12,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { classNames } from "../utilities";
 import { LinearProgress } from "@mui/material";
 import { GlobalContext } from "../context/GlobalState";
-import Image from "next/image";
+import Avatar from "./Avatar";
 
 async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
@@ -78,12 +78,6 @@ const Nav = () => {
     }
   };
   const [user] = useAuthState(auth);
-  const defaultPhotoURL = "https://i.stack.imgur.com/34AD2.jpg";
-  const photoURL = user
-    ? user.photoURL
-      ? user.photoURL
-      : defaultPhotoURL
-    : defaultPhotoURL;
   useEffect(() => {
     Router.events.on("routeChangeStart", () => {
       setLoad(true);
@@ -205,15 +199,12 @@ const Nav = () => {
                       <div>
                         <Menu.Button className="flex rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                           <span className="sr-only">Open user menu</span>
-                          <Image
-                            layout="fixed"
-                            width="40px"
-                            height="40px"
-                            src={photoURL}
-                            alt="Avatar of the user"
-                            style={{ borderRadius: "50%" }}
-                            referrerPolicy="no-referrer"
-                            priority
+                          <Avatar
+                            profileURL={user && user.photoURL}
+                            initials={
+                              (user && user.photoURL) ||
+                              user.displayName.charAt(0).toUpperCase()
+                            }
                           />
                         </Menu.Button>
                       </div>
@@ -299,15 +290,12 @@ const Nav = () => {
                 {user && (
                   <div className="mb-3 flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <Image
-                        layout="fixed"
-                        width="40px"
-                        height="40px"
-                        src={photoURL}
-                        alt="Avatar of the user"
-                        style={{ borderRadius: "50%" }}
-                        referrerPolicy="no-referrer"
-                        priority
+                      <Avatar
+                        profileURL={user && user.photoURL}
+                        initials={
+                          (user && user.photoURL) ||
+                          user.displayName.charAt(0).toUpperCase()
+                        }
                       />
                     </div>
                     <div className="ml-3">

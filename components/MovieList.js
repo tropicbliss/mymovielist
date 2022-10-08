@@ -12,7 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalState";
 import { database } from "../firebaseConfig";
 import { classNames } from "../utilities";
-import Warning from "./Warning";
+import Info from "./Info";
 
 const MovieList = ({ uid, showName }) => {
   const { setLoad } = useContext(GlobalContext);
@@ -51,12 +51,7 @@ const MovieList = ({ uid, showName }) => {
   if (completedList === null || displayName === null) {
     return <></>;
   } else if (completedList.length === 0) {
-    return (
-      <Warning
-        title="Unable to show any movies"
-        description="This user has not completed any movies."
-      />
-    );
+    return <Info description="You have not completed any movies." />;
   } else {
     return (
       <div className="py-10">

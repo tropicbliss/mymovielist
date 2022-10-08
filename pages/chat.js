@@ -16,6 +16,7 @@ import { classNames } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
 import Warning from "../components/Warning";
 import Image from "next/image";
+import Avatar from "../components/Avatar";
 
 const Chat = () => {
   const [user] = useAuthState(auth);
@@ -58,13 +59,14 @@ function ChatRoom() {
       return;
     }
     setLoad(true);
-    const { uid, photoURL } = auth.currentUser;
+    const { uid, photoURL, displayName } = auth.currentUser;
     try {
       await addDoc(messagesRef, {
         text: formValue,
         createdAt: serverTimestamp(),
         uid,
         photoURL,
+        displayName,
       });
       dummy.current.scrollIntoView({ behavior: "smooth" });
     } catch (e) {
@@ -104,7 +106,7 @@ function ChatRoom() {
 }
 
 function ChatMessage(props) {
-  const { text, uid, photoURL } = props.message;
+  const { text, uid, photoURL, displayName } = props.message;
   const msgStatus = uid === auth.currentUser.uid ? "sent" : "received";
 
   return (
@@ -114,15 +116,9 @@ function ChatMessage(props) {
         "flex items-center my-3"
       )}
     >
-      <Image
-        layout="fixed"
-        width="40px"
-        height="40px"
-        src={photoURL}
-        alt="Avatar of the user"
-        style={{ borderRadius: "50%" }}
-        referrerPolicy="no-referrer"
-        priority
+      <Avatar
+        profileURL={photoURL}
+        initials={photoURL || displayName.charAt(0).toUpperCase()}
       />
       <div className="inline-flex mx-3 items-center rounded-full bg-cyber-purple text-white px-5 py-2 overflow-scroll">
         {text}
