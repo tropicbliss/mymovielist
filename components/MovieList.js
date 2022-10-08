@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
+import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalState";
 import { database } from "../firebaseConfig";
@@ -97,10 +98,14 @@ const MovieList = ({ uid, showName }) => {
                       {movieIdx + 1}
                       <dl className="font-normal lg:hidden">
                         <dt className="sr-only">Title</dt>
-                        <dd className="mt-1 truncate text-gray-700">
-                          {movie.movieTitle}
+                        <dd className="mt-1 truncate">
+                          <Link href={`/moviedb/${movie.id}`}>
+                            <a className="text-blue-500 underline">
+                              {movie.movieTitle}
+                            </a>
+                          </Link>
                         </dd>
-                        <dt className="sr-only sm:hidden">Email</dt>
+                        <dt className="sr-only sm:hidden">Completed Date</dt>
                         <dd className="mt-1 truncate text-gray-500 sm:hidden">
                           <time
                             dateTime={format(
@@ -116,7 +121,12 @@ const MovieList = ({ uid, showName }) => {
                         </dd>
                       </dl>
                     </td>
-                    <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                    <td className="hidden px-3 py-4sm:table-cell">
+                      <Link href={`/moviedb/${movie.id}`}>
+                        <a className="text-sm text-blue-500 underline">
+                          {movie.movieTitle}
+                        </a>
+                      </Link>
                       {movie.movieTitle}
                     </td>
                     <td className="px-3 py-4 text-sm text-gray-500">
