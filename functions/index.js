@@ -112,4 +112,6 @@ exports.detectBadWordsInReview = functions
     }
   });
 
-exports.myStorageFunction;
+// exports.updateGlobalRank = functions
+//   .region("us-central1")
+//   .firestore.document("");

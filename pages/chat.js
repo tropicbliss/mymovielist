@@ -15,7 +15,6 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { classNames } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
 import Warning from "../components/Warning";
-import Image from "next/image";
 import Avatar from "../components/Avatar";
 
 const Chat = () => {
