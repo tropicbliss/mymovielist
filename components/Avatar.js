@@ -1,13 +1,7 @@
 import Image from "next/image";
 
 const Avatar = ({ profileURL, initials }) => {
-  if (initials) {
-    return (
-      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-        <span className="font-medium leading-none text-white">{initials}</span>
-      </span>
-    );
-  } else if (profileURL) {
+  if (profileURL) {
     return (
       <Image
         layout="fixed"
@@ -19,6 +13,12 @@ const Avatar = ({ profileURL, initials }) => {
         referrerPolicy="no-referrer"
         priority
       />
+    );
+  } else if (initials) {
+    return (
+      <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
+        <span className="font-medium leading-none text-white">{initials}</span>
+      </span>
     );
   } else {
     return (
