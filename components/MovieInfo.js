@@ -87,7 +87,13 @@ const MovieInfo = ({ movieInfo, id }) => {
       setIsWatched(null);
       return;
     }
-    const watchedDocRef = doc(database, "watchlist", user.uid, "movies", id);
+    const watchedDocRef = doc(
+      database,
+      "watchlist",
+      user.uid,
+      "watchlistMovies",
+      id
+    );
     setLoad(true);
     getDoc(watchedDocRef)
       .then((watchedDocSnap) => {
@@ -103,7 +109,7 @@ const MovieInfo = ({ movieInfo, id }) => {
   }, [user, id]);
   const handleWatchListAction = async () => {
     setLoad(true);
-    const docRef = doc(database, "watchlist", user.uid, "movies", id);
+    const docRef = doc(database, "watchlist", user.uid, "watchlistMovies", id);
     try {
       if (isWatched) {
         await deleteDoc(docRef);

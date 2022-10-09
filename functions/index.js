@@ -112,6 +112,6 @@ exports.detectBadWordsInReview = functions
     }
   });
 
-// exports.updateGlobalRank = functions
-//   .region("us-central1")
-//   .firestore.document("");
+exports.updateGlobalRank = functions
+  .region("us-central1")
+  .firestore.document("");

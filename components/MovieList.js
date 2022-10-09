@@ -48,6 +48,7 @@ const MovieList = ({ uid, showName }) => {
         setLoad(false);
       });
   }, [uid]);
+  console.log(completedList);
 
   if (completedList === null || displayName === null) {
     return <></>;
@@ -121,13 +122,12 @@ const MovieList = ({ uid, showName }) => {
                         </dd>
                       </dl>
                     </td>
-                    <td className="hidden px-3 py-4sm:table-cell">
+                    <td className="hidden px-3 py-4 sm:table-cell">
                       <Link href={`/moviedb/${movie.id}`}>
                         <a className="text-sm text-blue-500 underline">
                           {movie.movieTitle}
                         </a>
                       </Link>
-                      {movie.movieTitle}
                     </td>
                     <td className="px-3 py-4 text-sm text-gray-500">
                       <time

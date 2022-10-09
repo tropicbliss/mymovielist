@@ -179,7 +179,12 @@ function WatchList(props) {
   const { user, changeTabs } = props;
   const [watchlist, setWatchlist] = useState(null);
   useEffect(() => {
-    const watchlistRef = collection(database, "watchlist", user.uid, "movies");
+    const watchlistRef = collection(
+      database,
+      "watchlist",
+      user.uid,
+      "watchlistMovies"
+    );
     const result = [];
     setLoad(true);
     getDocs(watchlistRef)
@@ -318,7 +323,7 @@ function WatchedModal(props) {
       database,
       "watchlist",
       user.uid,
-      "movies",
+      "watchlistMovies",
       initialOpen.id
     );
     const userRef = doc(database, "completedList", user.uid);
