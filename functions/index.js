@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
 const NewsApi = require("newsapi");
 const {
   formatArticles,
@@ -7,11 +8,14 @@ const {
 } = require("./utilities");
 const { NEWS_API_KEY, OMDB_API_KEY } = require("./apiKeys");
 const Filter = require("bad-words");
+const { FieldValue } = require("firebase-admin/firestore");
 const axios = require("axios").default;
 
 const INITIAL_OMDB_URL = "http://www.omdbapi.com/?apikey=";
 
 const api = new NewsApi(NEWS_API_KEY);
+
+admin.initializeApp();
 
 exports.news = functions.region("us-central1").https.onCall((data, context) => {
   const page = data.page;
@@ -113,5 +117,33 @@ exports.detectBadWordsInReview = functions
   });
 
 exports.updateGlobalRank = functions
-  .region("us-central1")
-  .firestore.document("");
+  .region("asia-southeast1")
+  .firestore.document("completedList/{userId}/movies/{movieId}")
+  .onCreate((doc, ctx) => {
+    const movieId = doc.id;
+    const { userRanking, movieTitle } = doc.data();
+    const globalRankDocRef = admin
+      .firestore()
+      .collection("globalRank")
+      .doc(movieId);
+    globalRankDocRef.get().then(async (oldData) => {
+      if (oldData.exists) {
+        const { totalSum, sampleSize } = oldData.data();
+        const newMeanRanking = Math.round(
+          (totalSum + userRanking) / (sampleSize + 1)
+        );
+        await globalRankDocRef.update({
+          totalSum: FieldValue.increment(1),
+          sampleSize: FieldValue.increment(userRanking),
+          meanRanking: newMeanRanking,
+        });
+      } else {
+        await globalRankDocRef.set({
+          movieTitle,
+          totalSum: userRanking,
+          sampleSize: 1,
+          meanRanking: userRanking,
+        });
+      }
+    });
+  });
