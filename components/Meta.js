@@ -15,8 +15,8 @@ const Meta = ({ title, keywords, description }) => {
 
 Meta.defaultProps = {
   title: "MyMovieList",
-  keywords: "",
-  description: "",
+  keywords: "movie, film",
+  description: "The premier movie watcher's paradise",
 };
 
 export default Meta;
