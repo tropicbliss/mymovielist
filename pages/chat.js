@@ -119,7 +119,7 @@ function ChatMessage(props) {
         profileURL={photoURL}
         initials={displayName.charAt(0).toUpperCase()}
       />
-      <div className="inline-flex mx-3 items-center rounded-full bg-cyber-purple text-white px-5 py-2 overflow-scroll">
+      <div className="inline-flex mx-3 items-center rounded-full bg-cyber-purple text-white px-5 py-2">
         {text}
       </div>
     </div>
