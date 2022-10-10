@@ -21,6 +21,7 @@ const MovieList = ({ uid, showName }) => {
   const [completedList, setCompletedList] = useState(null);
   const userRef = doc(database, "completedList", uid);
   const [displayName, loading, error] = useDocumentData(userRef);
+  console.log(displayName);
   useEffect(() => {
     setLoad(loading);
   }, [loading]);
@@ -71,7 +72,7 @@ const MovieList = ({ uid, showName }) => {
           <header>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
-                {`${displayName}'s Movie List`}
+                {`${displayName.displayName}'s Movie List`}
               </h1>
             </div>
           </header>
