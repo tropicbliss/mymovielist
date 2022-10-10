@@ -104,7 +104,8 @@ function ChatRoom() {
   );
 }
 
-function ChatMessage({ text, uid, photoURL, displayName }) {
+function ChatMessage({ message }) {
+  const { text, uid, photoURL, displayName } = message;
   const msgStatus = uid === auth.currentUser.uid ? "sent" : "received";
 
   return (
