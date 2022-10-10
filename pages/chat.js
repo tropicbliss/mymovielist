@@ -122,7 +122,7 @@ function ChatMessage(props) {
       <p
         className={classNames(
           msgStatus === "sent" && "self-end",
-          "bg-cyber-purple max-w-lg mb-3 leading-6 px-3 py-5 rounded-3xl relative text-center mx-1 my-1 text-white"
+          "bg-cyber-purple max-w-lg mb-3 leading-6 px-3 py-3 rounded-3xl relative text-center mx-1 my-1 text-white"
         )}
       >
         {text}
