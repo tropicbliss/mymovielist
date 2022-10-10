@@ -112,16 +112,21 @@ function ChatMessage(props) {
     <div
       className={classNames(
         msgStatus === "sent" && "flex-row-reverse",
-        "flex items-center my-3"
+        "flex text-center items-center"
       )}
     >
       <Avatar
         profileURL={photoURL}
         initials={displayName.charAt(0).toUpperCase()}
       />
-      <div className="inline-flex mx-3 items-center rounded-full bg-cyber-purple text-white px-5 py-2 truncate">
+      <p
+        className={classNames(
+          msgStatus === "sent" && "self-end",
+          "bg-cyber-purple max-w-lg mb-3 leading-6 px-3 py-5 rounded-3xl relative text-center mx-1 my-1 text-white"
+        )}
+      >
         {text}
-      </div>
+      </p>
     </div>
   );
 }
