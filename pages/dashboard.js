@@ -37,9 +37,8 @@ const Dashboard = () => {
   );
 };
 
-function Dash(props) {
+function Dash({ user }) {
   const { setToast, setNiceMsg } = useContext(GlobalContext);
-  const { user } = props;
   const [isInWatchList, setIsInWatchList] = useState(true);
   const tabs = [
     { name: "Watch List", current: isInWatchList },
@@ -79,7 +78,7 @@ function Dash(props) {
             <button
               type="button"
               onClick={share}
-              className="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="ml-3 inline-flex items-center rounded-md border border-transparent bg-cyber-purple px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2"
             >
               Share
             </button>
@@ -94,7 +93,7 @@ function Dash(props) {
           <select
             id="current-tab"
             name="current-tab"
-            className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+            className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-cyber-purple focus:outline-none focus:ring-cyber-purple sm:text-sm"
             defaultValue={tabs.find((tab) => tab.current).name}
             onChange={(e) => setIsInWatchList(e.target.value === "Watch List")}
           >
@@ -111,7 +110,7 @@ function Dash(props) {
                 onClick={() => setIsInWatchList(tab.name === "Watch List")}
                 className={classNames(
                   tab.current
-                    ? "border-indigo-500 text-indigo-600"
+                    ? "border-cyber-purple text-cyber-purple"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
                   "whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm"
                 )}
@@ -161,7 +160,7 @@ function NoMovie() {
           <a>
             <button
               type="button"
-              className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex items-center rounded-md border border-transparent bg-cyber-purple px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2"
             >
               <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
               Global Rank
@@ -173,9 +172,8 @@ function NoMovie() {
   );
 }
 
-function WatchList(props) {
+function WatchList({ user }) {
   const { setLoad } = useContext(GlobalContext);
-  const { user } = props;
   const [watchlist, setWatchlist] = useState(null);
   useEffect(() => {
     const watchlistRef = collection(
@@ -253,7 +251,7 @@ function WatchList(props) {
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <button
                             onClick={() => setOpenModal(movie)}
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className="text-cyber-purple hover:text-indigo-900"
                           >
                             Watched
                             <span className="sr-only">
@@ -274,9 +272,8 @@ function WatchList(props) {
   }
 }
 
-function WatchedModal(props) {
+function WatchedModal({ initialOpen, resetField, user }) {
   const { setLoad, unknownError } = useContext(GlobalContext);
-  const { initialOpen, resetField, user } = props;
   const [open, setOpen] = useState(false);
   useEffect(() => {
     setOpen(Boolean(initialOpen));
@@ -395,7 +392,7 @@ function WatchedModal(props) {
                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
+                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-cyber-purple px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2 sm:col-start-2 sm:text-sm"
                     onClick={() => {
                       resetField();
                       setStars(1);
@@ -406,7 +403,7 @@ function WatchedModal(props) {
                   </button>
                   <button
                     type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
+                    className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
                     onClick={() => {
                       resetField();
                       setStars(1);

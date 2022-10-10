@@ -94,7 +94,7 @@ function ChatRoom() {
         <div className="mt-3 rounded-md sm:mt-0 sm:flex-shrink-0">
           <button
             type="submit"
-            className="inline-flex items-center rounded-full border border-transparent bg-cyber-purple p-3 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            className="inline-flex items-center rounded-full border border-transparent bg-cyber-purple p-3 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2"
           >
             <PaperAirplaneIcon className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -104,8 +104,7 @@ function ChatRoom() {
   );
 }
 
-function ChatMessage(props) {
-  const { text, uid, photoURL, displayName } = props.message;
+function ChatMessage({ text, uid, photoURL, displayName }) {
   const msgStatus = uid === auth.currentUser.uid ? "sent" : "received";
 
   return (

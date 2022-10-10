@@ -200,7 +200,7 @@ const MovieInfo = ({ movieInfo, id }) => {
                 <button
                   type="button"
                   onClick={() => handleWatchListAction()}
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-cyber-purple py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2 focus:ring-offset-gray-50"
                 >
                   {isWatched ? "Remove from watch list" : "Add to watch list"}
                 </button>
@@ -209,7 +209,7 @@ const MovieInfo = ({ movieInfo, id }) => {
                 href={imdbLink}
                 target="_blank"
                 rel="noreferrer"
-                className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-50 py-3 px-8 text-base font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-50 py-3 px-8 text-base font-medium text-cyber-purple hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2 focus:ring-offset-gray-50"
               >
                 View on IMDb
               </a>
@@ -277,7 +277,7 @@ const MovieInfo = ({ movieInfo, id }) => {
                       <div className="flex-shrink-0">
                         <button
                           type="submit"
-                          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyber-purple focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          className="inline-flex items-center rounded-md border border-transparent bg-cyber-purple px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyber-purple focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2"
                         >
                           Post
                         </button>

@@ -23,8 +23,7 @@ const news = ({ articles, id }) => {
   );
 };
 
-function Pagination(props) {
-  const { totalPages, currentPage } = props;
+function Pagination({ totalPages, currentPage }) {
   const previous = currentPage == 1 ? currentPage : +currentPage - 1;
   const next = currentPage == totalPages ? currentPage : +currentPage + 1;
 
@@ -47,7 +46,7 @@ function Pagination(props) {
             return (
               <Link key={page} href={`/news/${page}`}>
                 <a
-                  className="inline-flex items-center border-t-2 border-indigo-500 px-4 pt-4 text-sm font-medium text-indigo-600"
+                  className="inline-flex items-center border-t-2 border-cyber-purple px-4 pt-4 text-sm font-medium text-cyber-purple"
                   aria-current="page"
                 >
                   {page}
