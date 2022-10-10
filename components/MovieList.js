@@ -10,15 +10,24 @@ import {
 } from "firebase/firestore";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { GlobalContext } from "../context/GlobalState";
 import { database } from "../firebaseConfig";
 import { classNames } from "../utilities";
 import Info from "./Info";
 
 const MovieList = ({ uid, showName }) => {
-  const { setLoad } = useContext(GlobalContext);
+  const { setLoad, unknownError } = useContext(GlobalContext);
   const [completedList, setCompletedList] = useState(null);
-  const [displayName, setDisplayName] = useState(null);
+  const userRef = doc(database, "completedList", uid);
+  const [displayName, loading, error] = useDocumentData(userRef);
+  useEffect(() => {
+    setLoad(loading);
+  }, [loading]);
+  if (error) {
+    unknownError();
+    console.log(error);
+  }
   useEffect(() => {
     const completedListRef = collection(
       database,
@@ -26,12 +35,15 @@ const MovieList = ({ uid, showName }) => {
       uid,
       "movies"
     );
-    const q = query(completedListRef, orderBy("userRanking", "desc"));
-    const userRef = doc(database, "completedList", uid);
+    const q = query(
+      completedListRef,
+      orderBy("userRanking", "desc"),
+      orderBy("movieTitle", "asc")
+    );
     const result = [];
     setLoad(true);
-    Promise.all([getDocs(q), getDoc(userRef)])
-      .then(([res, userData]) => {
+    getDocs(q)
+      .then((res) => {
         res.forEach((movie) => {
           result.push({
             id: movie.id,
@@ -40,7 +52,6 @@ const MovieList = ({ uid, showName }) => {
             completedAt: movie.data().completedAt,
           });
         });
-        setDisplayName(userData.data().displayName);
       })
       .catch(() => {})
       .finally(() => {
@@ -48,117 +59,117 @@ const MovieList = ({ uid, showName }) => {
         setLoad(false);
       });
   }, [uid]);
-  console.log(completedList);
 
-  if (completedList === null || displayName === null) {
+  if (completedList === null || displayName === undefined) {
     return <></>;
   } else if (completedList.length === 0) {
-    return <Info description="You have not completed any movies." />;
+    return <Info description="You have not completed any movies yet." />;
   } else {
     return (
       <div className="py-10">
         {showName && (
           <header>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">{`${displayName}'s Movie List`}</h1>
+              <h1 className="text-3xl font-bold leading-tight tracking-tight text-gray-900">
+                {`${displayName}'s Movie List`}
+              </h1>
             </div>
           </header>
         )}
         <main>
           <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                  >
-                    #
-                  </th>
-                  <th
-                    scope="col"
-                    className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
-                  >
-                    Title
-                  </th>
-                  <th
-                    scope="col"
-                    className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
-                  >
-                    Completed Date
-                  </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                    <span className="sr-only">User Rating</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
-                {completedList.map((movie, movieIdx) => (
-                  <tr key={movieIdx}>
-                    <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-6">
-                      {movieIdx + 1}
-                      <dl className="font-normal lg:hidden">
-                        <dt className="sr-only">Title</dt>
-                        <dd className="mt-1 truncate">
-                          <Link href={`/moviedb/${movie.id}`}>
-                            <a className="text-blue-500 underline">
-                              {movie.movieTitle}
-                            </a>
-                          </Link>
-                        </dd>
-                        <dt className="sr-only sm:hidden">Completed Date</dt>
-                        <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                          <time
-                            dateTime={format(
-                              movie.completedAt.toDate(),
-                              "yyyy-MM-dd"
-                            )}
+            <div className="mt-8 flex flex-col">
+              <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                  <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-300">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                           >
-                            {format(
-                              movie.completedAt.toDate(),
-                              "MMMM dd, yyyy"
-                            )}
-                          </time>
-                        </dd>
-                      </dl>
-                    </td>
-                    <td className="hidden px-3 py-4 sm:table-cell">
-                      <Link href={`/moviedb/${movie.id}`}>
-                        <a className="text-sm text-blue-500 underline">
-                          {movie.movieTitle}
-                        </a>
-                      </Link>
-                    </td>
-                    <td className="px-3 py-4 text-sm text-gray-500">
-                      <time
-                        dateTime={format(
-                          movie.completedAt.toDate(),
-                          "yyyy-MM-dd"
-                        )}
-                      >
-                        {format(movie.completedAt.toDate(), "MMMM dd, yyyy")}
-                      </time>
-                    </td>
-                    <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                      <div className="flex items-center">
-                        {[0, 1, 2, 3, 4].map((rating) => (
-                          <StarIcon
-                            key={rating}
-                            className={classNames(
-                              movie.userRanking > rating
-                                ? "text-yellow-400"
-                                : "text-gray-300",
-                              "h-5 w-5 flex-shrink-0"
-                            )}
-                            aria-hidden="true"
-                          />
+                            #
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Title
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Completed At
+                          </th>
+                          <th
+                            scope="col"
+                            className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                          >
+                            <span className="sr-only">User Ranking</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white">
+                        {completedList.map((movie, movieIdx) => (
+                          <tr
+                            key={movieIdx}
+                            className={
+                              movieIdx % 2 === 0 ? undefined : "bg-gray-50"
+                            }
+                          >
+                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                              {movieIdx + 1}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
+                              <Link href={`/moviedb/${movie.id}`}>
+                                {movie.movieTitle}
+                              </Link>
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              {movie.completedAt ? (
+                                <time
+                                  dateTime={format(
+                                    movie.completedAt.toDate(),
+                                    "yyyy-MM-dd"
+                                  )}
+                                >
+                                  {format(
+                                    movie.completedAt.toDate(),
+                                    "MMMM dd, yyyy"
+                                  )}
+                                </time>
+                              ) : (
+                                <p title="Refresh the page to view updated date">
+                                  -
+                                </p>
+                              )}
+                            </td>
+                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                              <div className="flex items-center">
+                                {[0, 1, 2, 3, 4].map((rating) => (
+                                  <StarIcon
+                                    key={rating}
+                                    className={classNames(
+                                      movie.userRanking > rating
+                                        ? "text-yellow-400"
+                                        : "text-gray-300",
+                                      "h-5 w-5 flex-shrink-0"
+                                    )}
+                                    aria-hidden="true"
+                                  />
+                                ))}
+                              </div>
+                            </td>
+                          </tr>
                         ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       </div>

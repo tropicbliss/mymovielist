@@ -8,7 +8,6 @@ import Link from "next/link";
 import { classNames } from "../utilities";
 import { useContext, useEffect, useRef, useState, Fragment } from "react";
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -125,7 +124,7 @@ function Dash(props) {
         </div>
       </div>
       {isInWatchList ? (
-        <WatchList user={user} changeTabs={() => setIsInWatchList(false)} />
+        <WatchList user={user} />
       ) : (
         <MovieList uid={user.uid} showName={false} />
       )}
@@ -176,7 +175,7 @@ function NoMovie() {
 
 function WatchList(props) {
   const { setLoad } = useContext(GlobalContext);
-  const { user, changeTabs } = props;
+  const { user } = props;
   const [watchlist, setWatchlist] = useState(null);
   useEffect(() => {
     const watchlistRef = collection(
@@ -203,7 +202,6 @@ function WatchList(props) {
   const resetField = () => {
     setWatchlist(watchlist.filter((movie) => movie.id !== openModal.id));
     setOpenModal(null);
-    changeTabs();
   };
 
   if (watchlist === null) {
@@ -219,30 +217,21 @@ function WatchList(props) {
           user={user}
         />
         <div className="mt-8 flex flex-col">
-          <div className="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle">
-              <div className="shadow-sm ring-1 ring-black ring-opacity-5">
-                <table
-                  className="min-w-full border-separate"
-                  style={{ borderSpacing: 0 }}
-                >
+          <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-300">
                   <thead className="bg-gray-50">
                     <tr>
                       <th
                         scope="col"
-                        className="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
-                      >
-                        #
-                      </th>
-                      <th
-                        scope="col"
-                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Title
                       </th>
                       <th
                         scope="col"
-                        className="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pr-4 pl-3 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8"
+                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
                       >
                         <span className="sr-only">Watched</span>
                       </th>
@@ -250,35 +239,18 @@ function WatchList(props) {
                   </thead>
                   <tbody className="bg-white">
                     {watchlist.map((movie, movieIdx) => (
-                      <tr key={movieIdx}>
-                        <td
-                          className={classNames(
-                            movieIdx !== watchlist.length - 1
-                              ? "border-b border-gray-200"
-                              : "",
-                            "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
-                          )}
-                        >
-                          {movieIdx + 1}
+                      <tr
+                        key={movieIdx}
+                        className={
+                          movieIdx % 2 === 0 ? undefined : "bg-gray-50"
+                        }
+                      >
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6 underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
+                          <Link href={`/moviedb/${movie.id}`}>
+                            {movie.movieTitle}
+                          </Link>
                         </td>
-                        <td
-                          className={classNames(
-                            movieIdx !== watchlist.length - 1
-                              ? "border-b border-gray-200"
-                              : "",
-                            "whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden sm:table-cell"
-                          )}
-                        >
-                          {movie.movieTitle}
-                        </td>
-                        <td
-                          className={classNames(
-                            movieIdx !== watchlist.length - 1
-                              ? "border-b border-gray-200"
-                              : "",
-                            "relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-6 lg:pr-8"
-                          )}
-                        >
+                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <button
                             onClick={() => setOpenModal(movie)}
                             className="text-indigo-600 hover:text-indigo-900"
