@@ -13,7 +13,7 @@ function Hero() {
   return (
     <main className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24">
       <div className="text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+        <h1 className="text-4xl font-bold tracking-tight text-cyber-purple sm:text-5xl md:text-6xl">
           <span className="block xl:inline">
             Welcome to the premier movie watcher&apos;s paradise
           </span>
