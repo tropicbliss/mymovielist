@@ -14,6 +14,7 @@ module.exports = {
       },
       colors: {
         "cyber-purple": "#4a4275",
+        "slime-green": "#688530",
       },
     },
   },
