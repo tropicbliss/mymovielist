@@ -151,7 +151,7 @@ const MovieInfo = ({ movieInfo, id }) => {
         <div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
           <div className="lg:col-span-4 lg:row-end-1">
             <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg bg-gray-100">
-              {movieInfo.poster ? (
+              {movieInfo.poster && (
                 <Image
                   className="object-cover object-center"
                   src={movieInfo.poster}
@@ -159,8 +159,6 @@ const MovieInfo = ({ movieInfo, id }) => {
                   alt="Movie poster"
                   priority
                 />
-              ) : (
-                <p>Image cannot be loaded</p>
               )}
             </div>
           </div>
