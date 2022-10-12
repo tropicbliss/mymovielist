@@ -131,7 +131,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
       ],
     },
     {
-      name: "Awards",
+      name: "Review scores",
       features: [
         {
           name: "Metacritic",
