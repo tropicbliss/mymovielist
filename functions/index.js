@@ -18,12 +18,6 @@ const api = new NewsApi(NEWS_API_KEY);
 admin.initializeApp();
 
 exports.news = functions.region("us-central1").https.onCall((data, context) => {
-  if (context.app == undefined) {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "The function must be called from an App Check verified app."
-    );
-  }
   const page = data.page;
   return api.v2
     .topHeadlines({
@@ -48,12 +42,6 @@ exports.news = functions.region("us-central1").https.onCall((data, context) => {
 exports.movieInfo = functions
   .region("us-central1")
   .https.onCall((data, context) => {
-    if (context.app == undefined) {
-      throw new functions.https.HttpsError(
-        "failed-precondition",
-        "The function must be called from an App Check verified app."
-      );
-    }
     const imdbId = data.id;
     return axios
       .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
@@ -78,12 +66,6 @@ exports.movieInfo = functions
 exports.movieInfoWithSearch = functions
   .region("us-central1")
   .https.onCall((data, context) => {
-    if (context.app == undefined) {
-      throw new functions.https.HttpsError(
-        "failed-precondition",
-        "The function must be called from an App Check verified app."
-      );
-    }
     const searchTerm = data.search;
     return axios
       .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
