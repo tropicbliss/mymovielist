@@ -9,7 +9,7 @@ const firebaseConfig = {
   projectId: "mymovielist-f6014",
   storageBucket: "mymovielist-f6014.appspot.com",
   messagingSenderId: "426694518695",
-  appId: "1:426694518695:web:07db0c171c8f60d6d9f882",
+  appId: "1:426694518695:web:0ae7a41b638ae057d9f882",
 };
 
 export const app = initializeApp(firebaseConfig);
