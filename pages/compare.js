@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { getMovieInfo, getMovieInfoFromTitle, classNames } from "../utilities";
-import { GlobalContext } from "../../context/GlobalState";
+import { GlobalContext } from "../context/GlobalState";
 import { Fragment } from "react";
 import Link from "next/link";
 
@@ -131,7 +131,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
       ],
     },
     {
-      name: "Awards",
+      name: "Review scores",
       features: [
         {
           name: "Metacritic",

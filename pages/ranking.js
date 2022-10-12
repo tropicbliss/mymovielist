@@ -3,7 +3,7 @@ import { database } from "../firebaseConfig";
 import Warning from "../components/Warning";
 import Link from "next/link";
 import { StarIcon } from "@heroicons/react/20/solid";
-import { classNames } from "../src/utilities";
+import { classNames } from "../utilities";
 
 const ranking = ({ rankingInfo }) => {
   return (
