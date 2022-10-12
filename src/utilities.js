@@ -1,5 +1,5 @@
 import { httpsCallable } from "firebase/functions";
-import { functions } from "./firebaseConfig";
+import { functions } from "../firebaseConfig";
 
 export const getNews = async (page) => {
   const newsEndpoint = httpsCallable(functions, "news");
