@@ -118,15 +118,12 @@ const Nav = () => {
               <div className="relative flex h-16 items-center justify-between">
                 <div className="flex items-center px-2 lg:px-0">
                   <Link href="/">
-                    <a className="flex-shrink-0 flex items-center space-x-3">
-                      <FilmIcon
-                        className="block h-8 w-auto text-cyber-purple lg:hidden"
-                        aria-hidden="true"
-                      />
-                      <FilmIcon
-                        className="hidden h-8 w-auto text-cyber-purple lg:block"
-                        aria-hidden="true"
-                      />
+                    <a
+                      className="flex-shrink-0 flex items-center space-x-3"
+                      aria-label="Go back to home page"
+                    >
+                      <FilmIcon className="block h-8 w-auto text-cyber-purple lg:hidden" />
+                      <FilmIcon className="hidden h-8 w-auto text-cyber-purple lg:block" />
                     </a>
                   </Link>
                   <div className="hidden lg:ml-6 lg:block">
