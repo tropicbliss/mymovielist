@@ -80,7 +80,7 @@ function Features() {
           <h2 className="text-lg font-semibold text-cyber-purple">
             Everything you need
           </h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-slime-green">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
             All-in-one platform
           </p>
           <p className="mt-4 text-lg text-gray-500">
@@ -97,7 +97,7 @@ function Features() {
                     className="absolute h-6 w-6 text-green-500"
                     aria-hidden="true"
                   />
-                  <p className="ml-9 text-lg font-medium leading-6 text-slime-green">
+                  <p className="ml-9 text-lg font-medium leading-6 text-gray-900">
                     {feature.name}
                   </p>
                 </dt>
