@@ -127,7 +127,7 @@ const MovieInfo = ({ movieInfo, id }) => {
         if (isInCompletedList) {
           setErrorMsg(
             "Error adding movie to watch list",
-            "You have already watched the movie."
+            "You already watched the movie."
           );
           setToast(true);
           return;
