@@ -34,7 +34,7 @@ const Footer = () => {
         </div>
         <div className="mt-8 md:order-1 md:mt-0">
           <p className="text-center text-base text-gray-400">
-            &copy; 2022 SMU WAD II, Chirag, Eugene, John, Kabeer, et al.{" "}
+            &copy; 2022, Chirag, Eugene, John, Kabeer, et al.{" "}
             <a
               target="_blank"
               rel="noreferrer"
