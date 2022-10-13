@@ -22,7 +22,7 @@ import Image from "next/image";
 import Avatar from "./Avatar";
 
 function getStars(imdbRating) {
-  if (imdbRating === null) {
+  if (!imdbRating) {
     return null;
   }
   return Math.round(imdbRating / 2);
