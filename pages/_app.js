@@ -1,8 +1,5 @@
 import "../styles/globals.css";
 import Layout from "../components/Layout";
-import { H } from "highlight.run";
-
-H.init("3ejn3vgp");
 
 function MyApp({ Component, pageProps }) {
   return (
