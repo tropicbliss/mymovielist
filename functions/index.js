@@ -98,6 +98,7 @@ exports.movieInfoWithSearch = functions
   });
 
 exports.detectBadWordsInChat = functions
+  .runWith({ minInstances: 1 })
   .region("asia-southeast1")
   .firestore.document("messages/{msgId}")
   .onCreate((doc, ctx) => {
@@ -110,6 +111,7 @@ exports.detectBadWordsInChat = functions
   });
 
 exports.detectBadWordsInReview = functions
+  .runWith({ minInstances: 1 })
   .region("asia-southeast1")
   .firestore.document("reviews/{msgId}")
   .onCreate((doc, ctx) => {
