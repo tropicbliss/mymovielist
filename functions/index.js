@@ -17,29 +17,33 @@ const api = new NewsApi(NEWS_API_KEY);
 
 admin.initializeApp();
 
-exports.news = functions.region("us-central1").https.onCall((data, context) => {
-  const page = data.page;
-  return api.v2
-    .topHeadlines({
-      country: "us",
-      category: "entertainment",
-      q: "",
-      pageSize: 20,
-      page,
-    })
-    .then((result) => {
-      if (!result.articles) {
+exports.news = functions
+  .runWith({ minInstances: 1 })
+  .region("us-central1")
+  .https.onCall((data, context) => {
+    const page = data.page;
+    return api.v2
+      .topHeadlines({
+        country: "us",
+        category: "entertainment",
+        q: "",
+        pageSize: 20,
+        page,
+      })
+      .then((result) => {
+        if (!result.articles) {
+          return {
+            articles: [],
+          };
+        }
         return {
-          articles: [],
+          articles: result.articles.map((article) => formatArticles(article)),
         };
-      }
-      return {
-        articles: result.articles.map((article) => formatArticles(article)),
-      };
-    });
-});
+      });
+  });
 
 exports.movieInfo = functions
+  .runWith({ minInstances: 1 })
   .region("us-central1")
   .https.onCall((data, context) => {
     const imdbId = data.id;
@@ -64,6 +68,7 @@ exports.movieInfo = functions
   });
 
 exports.movieInfoWithSearch = functions
+  .runWith({ minInstances: 1 })
   .region("us-central1")
   .https.onCall((data, context) => {
     const searchTerm = data.search;
