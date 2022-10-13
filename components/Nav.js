@@ -13,6 +13,7 @@ import { classNames } from "../utilities";
 import { LinearProgress } from "@mui/material";
 import { GlobalContext } from "../context/GlobalState";
 import Avatar from "./Avatar";
+import { H } from "highlight.run";
 
 async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
@@ -78,6 +79,14 @@ const Nav = () => {
     }
   };
   const [user] = useAuthState(auth);
+  if (auth) {
+    H.identify(user.email, {
+      id: user.uid,
+      name: user.displayName,
+      phone: user.phoneNumber,
+      photoURL: user.photoURL,
+    });
+  }
   useEffect(() => {
     Router.events.on("routeChangeStart", () => {
       setLoad(true);
