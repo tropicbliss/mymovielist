@@ -150,6 +150,8 @@ const MovieInfo = ({ movieInfo, id }) => {
         return "IMDb Rating";
       case "BoxOffice":
         return "Box Office";
+      case "tomatoMeter":
+        return "Rotten Tomatoes";
       default:
         return heading;
     }
