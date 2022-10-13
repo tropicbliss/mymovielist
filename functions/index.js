@@ -21,8 +21,7 @@ exports.rootQuery = functions
   .runWith({ minInstances: 1 })
   .region("us-central1")
   .https.onCall((data, context) => {
-    const query = data.query;
-    const mode = data.mode;
+    const { query, mode } = data;
     switch (mode) {
       case "news":
         const page = query;
