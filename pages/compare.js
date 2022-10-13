@@ -210,7 +210,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                 <div className="mb-8 px-4">
                   <Link href={movie.link}>
                     <a>
-                      <h2 className="text-lg mb-3 font-medium leading-6 text-gray-900">
+                      <h2 className="text-lg mb-3 font-medium leading-6 underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
                         {movie.title}
                       </h2>
                       {movie.poster ? (
@@ -288,7 +288,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                   {movies.map((movie, movieIdx) => (
                     <Link href={movie.link} key={movieIdx}>
                       <th
-                        className="w-1/4 cursor-pointer px-6 pb-4 text-left text-lg font-medium leading-6 text-gray-900"
+                        className="w-1/4 cursor-pointer px-6 pb-4 text-left text-lg font-medium leading-6 underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
                         scope="col"
                       >
                         {movie.title}
