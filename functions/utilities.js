@@ -50,9 +50,6 @@ const propsToShow = [
 ];
 
 const mapMovieInfo = (movie) => {
-  if (movie.Response === "False") {
-    return null;
-  }
   let result = {};
   propsToShow.forEach((prop) => {
     if (movie[prop] !== "N/A") {

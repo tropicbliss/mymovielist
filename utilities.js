@@ -1,15 +1,19 @@
 import { httpsCallable } from "firebase/functions";
 import { functions } from "./firebaseConfig";
 
+const rootEndpoint = httpsCallable(functions, "rootQuery");
+
 export const getNews = async (page) => {
-  const newsEndpoint = httpsCallable(functions, "news");
-  const articles = await (await newsEndpoint({ page })).data.articles;
+  const articles = await (
+    await rootEndpoint({ query: page, mode: "news" })
+  ).data.articles;
   return articles;
 };
 
 export const getMovieInfo = async (imdbId) => {
-  const movieInfoEndpoint = httpsCallable(functions, "movieInfo");
-  const data = await (await movieInfoEndpoint({ id: imdbId })).data;
+  const data = await (
+    await rootEndpoint({ query: imdbId, mode: "movieId" })
+  ).data;
   return {
     info: data.info,
     poster: data.poster,
@@ -17,21 +21,19 @@ export const getMovieInfo = async (imdbId) => {
 };
 
 export const getID = async (title) => {
-  const searchEndpoint = httpsCallable(functions, "movieInfoWithSearch");
-  const id = await (await searchEndpoint({ search: title })).data.id;
+  const id = await (
+    await rootEndpoint({ query: title, mode: "getMovieIdFromSearch" })
+  ).data.id;
   return id;
 };
 
 export const getMovieInfoFromTitle = async (title) => {
-  const movieInfoFromTitleEndpoint = httpsCallable(
-    functions,
-    "movieInfoWithSearch"
-  );
-  const data = await (await movieInfoFromTitleEndpoint({ search: title })).data;
+  const data = await (
+    await rootEndpoint({ query: title, mode: "movieSearch" })
+  ).data;
   return {
     info: data.info,
     poster: data.poster,
-    id: data.id,
   };
 };
 

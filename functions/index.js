@@ -17,84 +17,93 @@ const api = new NewsApi(NEWS_API_KEY);
 
 admin.initializeApp();
 
-exports.news = functions
+exports.rootQuery = functions
   .runWith({ minInstances: 1 })
   .region("us-central1")
   .https.onCall((data, context) => {
-    const page = data.page;
-    return api.v2
-      .topHeadlines({
-        country: "us",
-        category: "entertainment",
-        q: "",
-        pageSize: 20,
-        page,
-      })
-      .then((result) => {
-        if (!result.articles) {
-          return {
-            articles: [],
-          };
-        }
-        return {
-          articles: result.articles.map((article) => formatArticles(article)),
-        };
-      });
-  });
-
-exports.movieInfo = functions
-  .runWith({ minInstances: 1 })
-  .region("us-central1")
-  .https.onCall((data, context) => {
-    const imdbId = data.id;
-    return axios
-      .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
-      .then((res) => res.data)
-      .then(async (movie) => {
-        if (movie.Response === "False") {
-          return {
-            info: null,
-            poster: null,
-          };
-        }
-        const result = mapMovieInfo(movie);
-        return {
-          info: result,
-          poster: await imageUrlToBase64(
-            `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
-          ),
-        };
-      });
-  });
-
-exports.movieInfoWithSearch = functions
-  .runWith({ minInstances: 1 })
-  .region("us-central1")
-  .https.onCall((data, context) => {
-    const searchTerm = data.search;
-    return axios
-      .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
-      .then((res) => res.data)
-      .then(async (movie) => {
-        if (movie.Response === "False") {
-          return {
-            info: null,
-            poster: null,
-            id: null,
-          };
-        }
-        const imdbId = movie.imdbID;
-        const result = mapMovieInfo(movie);
-        return {
-          info: result,
-          poster:
-            result &&
-            (await imageUrlToBase64(
-              `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
-            )),
-          id: imdbId,
-        };
-      });
+    const query = data.query;
+    const mode = data.mode;
+    switch (mode) {
+      case "news":
+        const page = query;
+        return api.v2
+          .topHeadlines({
+            country: "us",
+            category: "entertainment",
+            q: "",
+            pageSize: 20,
+            page,
+          })
+          .then((result) => {
+            if (!result.articles) {
+              return {
+                articles: [],
+              };
+            }
+            return {
+              articles: result.articles.map((article) =>
+                formatArticles(article)
+              ),
+            };
+          });
+      case "movieId":
+        const imdbId = query;
+        return axios
+          .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
+          .then((res) => res.data)
+          .then(async (movie) => {
+            if (movie.Response === "False") {
+              return {
+                info: null,
+                poster: null,
+              };
+            }
+            const result = mapMovieInfo(movie);
+            return {
+              info: result,
+              poster: await imageUrlToBase64(
+                `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
+              ),
+            };
+          });
+      case "movieSearch":
+        const searchTerm = query;
+        return axios
+          .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${searchTerm}`)
+          .then((res) => res.data)
+          .then(async (movie) => {
+            if (movie.Response === "False") {
+              return {
+                info: null,
+                poster: null,
+              };
+            }
+            const imdbId = movie.imdbID;
+            const result = mapMovieInfo(movie);
+            return {
+              info: result,
+              poster: await imageUrlToBase64(
+                `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
+              ),
+            };
+          });
+      case "getMovieIdFromSearch":
+        const x = query;
+        return axios
+          .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&t=${x}`)
+          .then((res) => res.data)
+          .then(async (movie) => {
+            if (movie.Response === "False") {
+              return {
+                id: null,
+              };
+            }
+            const imdbId = movie.imdbID;
+            return {
+              id: imdbId,
+            };
+          });
+    }
   });
 
 exports.detectBadWordsInChat = functions
