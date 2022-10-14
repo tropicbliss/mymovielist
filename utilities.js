@@ -34,6 +34,7 @@ export const getMovieInfoFromTitle = async (title) => {
   return {
     info: data.info,
     poster: data.poster,
+    id: data.id,
   };
 };
 

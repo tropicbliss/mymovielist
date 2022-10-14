@@ -9,7 +9,7 @@ const {
 const { NEWS_API_KEY, OMDB_API_KEY } = require("./apiKeys");
 const Filter = require("bad-words");
 const { FieldValue } = require("firebase-admin/firestore");
-const axios = require("axios").default;
+const axios = require("axios");
 
 const INITIAL_OMDB_URL = "http://www.omdbapi.com/?apikey=";
 
@@ -47,24 +47,26 @@ exports.rootQuery = functions
           });
       case "movieId":
         const imdbId = query;
-        return axios
-          .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
-          .then((res) => res.data)
-          .then(async (movie) => {
-            if (movie.Response === "False") {
-              return {
-                info: null,
-                poster: null,
-              };
-            }
-            const result = mapMovieInfo(movie);
+        return Promise.all([
+          axios
+            .get(`${INITIAL_OMDB_URL}${OMDB_API_KEY}&i=${imdbId}`)
+            .then((res) => res.data),
+          imageUrlToBase64(
+            `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
+          ),
+        ]).then(([movie, poster]) => {
+          if (movie.Response === "False") {
             return {
-              info: result,
-              poster: await imageUrlToBase64(
-                `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
-              ),
+              info: null,
+              poster: null,
             };
-          });
+          }
+          const result = mapMovieInfo(movie);
+          return {
+            info: result,
+            poster,
+          };
+        });
       case "movieSearch":
         const searchTerm = query;
         return axios
@@ -75,6 +77,7 @@ exports.rootQuery = functions
               return {
                 info: null,
                 poster: null,
+                id: null,
               };
             }
             const imdbId = movie.imdbID;
@@ -84,6 +87,7 @@ exports.rootQuery = functions
               poster: await imageUrlToBase64(
                 `http://img.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`
               ),
+              id: imdbId,
             };
           });
       case "getMovieIdFromSearch":
