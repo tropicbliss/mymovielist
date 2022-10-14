@@ -1,12 +1,11 @@
-import Image from "next/image";
+import Image from "next/future/image";
 
 const Avatar = ({ profileURL, initials }) => {
   if (profileURL) {
     return (
       <Image
-        layout="fixed"
-        width="40px"
-        height="40px"
+        width="40"
+        height="40"
         className="inline-block h-10 w-10 rounded-full"
         src={profileURL}
         alt="Profile of the user"

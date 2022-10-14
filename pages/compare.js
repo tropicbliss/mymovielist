@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import Image from "next/image";
+import Image from "next/future/image";
 import { getMovieInfo, getMovieInfoFromTitle, classNames } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
 import { Fragment } from "react";
@@ -217,8 +217,8 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                         <Image
                           className="rounded"
                           src={movie.poster}
-                          height="182px"
-                          width="146px"
+                          height="182"
+                          width="146"
                           alt={`Movie poster of ${movie.title}`}
                           priority
                         />
@@ -314,8 +314,8 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                               <Image
                                 className="rounded"
                                 src={movie.poster}
-                                height="182px"
-                                width="146px"
+                                height="182"
+                                width="146"
                                 alt={`Movie poster of ${movie.title}`}
                                 priority
                               />

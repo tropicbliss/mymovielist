@@ -18,7 +18,7 @@ import { database } from "../firebaseConfig";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { format } from "date-fns";
 import { GlobalContext } from "../context/GlobalState";
-import Image from "next/image";
+import Image from "next/future/image";
 import Avatar from "./Avatar";
 
 function getStars(imdbRating) {
@@ -166,8 +166,9 @@ const MovieInfo = ({ movieInfo, id }) => {
               {movieInfo.poster && (
                 <Image
                   className="object-cover object-center"
+                  sizes="100vw"
+                  fill
                   src={movieInfo.poster}
-                  layout="fill"
                   alt="Movie poster"
                   priority
                 />
