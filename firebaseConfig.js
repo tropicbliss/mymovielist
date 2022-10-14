@@ -4,12 +4,12 @@ import { getAuth } from "firebase/auth";
 import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC9flDVvt8lzZrvbTSeygI_aql6iMtMbvI",
-  authDomain: "mymovielist-f6014.firebaseapp.com",
-  projectId: "mymovielist-f6014",
-  storageBucket: "mymovielist-f6014.appspot.com",
-  messagingSenderId: "426694518695",
-  appId: "1:426694518695:web:0ae7a41b638ae057d9f882",
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
 };
 
 export const app = initializeApp(firebaseConfig);

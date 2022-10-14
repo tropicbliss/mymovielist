@@ -106,6 +106,11 @@ exports.rootQuery = functions
               id: imdbId,
             };
           });
+      default:
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "An unknown mode is used to call this function."
+        );
     }
   });
 
