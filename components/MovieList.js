@@ -21,7 +21,6 @@ const MovieList = ({ uid, showName }) => {
   const [completedList, setCompletedList] = useState(null);
   const userRef = doc(database, "completedList", uid);
   const [displayName, loading, error] = useDocumentData(userRef);
-  console.log(displayName);
   useEffect(() => {
     setLoad(loading);
   }, [loading]);
