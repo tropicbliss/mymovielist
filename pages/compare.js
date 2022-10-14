@@ -258,9 +258,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                           </th>
                           <td className="py-5 pr-4">
                             <span className="block text-right text-sm text-gray-700">
-                              {feature.values[movieIdx]
-                                ? feature.values[movieIdx]
-                                : "-"}
+                              {feature.values[movieIdx] || "-"}
                             </span>
                           </td>
                         </tr>
@@ -350,9 +348,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                         {movies.map((movie, movieIdx) => (
                           <td key={movieIdx} className="py-5 px-6">
                             <span className="block text-sm text-gray-700">
-                              {feature.values[movieIdx]
-                                ? feature.values[movieIdx]
-                                : "-"}
+                              {feature.values[movieIdx] || "-"}
                             </span>
                           </td>
                         ))}
