@@ -223,7 +223,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                           priority
                         />
                       ) : (
-                        <p>Movie poster not found</p>
+                        <p className="text-sm">Movie poster not found</p>
                       )}
                     </a>
                   </Link>
@@ -320,7 +320,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                                 priority
                               />
                             ) : (
-                              <p>Movie poster not found</p>
+                              <p className="text-sm">Movie poster not found</p>
                             )}
                           </a>
                         </Link>
