@@ -16,7 +16,7 @@
     "axios": "^1.1.2",
     "bad-words": "^3.0.4",
     "firebase-admin": "^11.1.0",
-    "firebase-functions": "^3.24.1",
+    "firebase-functions": "^4.0.0-rc.0",
     "newsapi": "^2.4.1"
   },
   "devDependencies": {
