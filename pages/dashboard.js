@@ -198,6 +198,9 @@ function WatchList({ user }) {
   }, [user]);
   const [openModal, setOpenModal] = useState(null);
   const resetField = (remove) => {
+    if (remove) {
+      setWatchlist(watchlist.filter((movie) => movie.id !== openModal.id));
+    }
     setOpenModal(null);
   };
 
@@ -312,12 +315,12 @@ function WatchedModal({ initialOpen, resetField, user }) {
         ),
         deleteDoc(deletedRef),
       ]);
+      resetField(true);
     } catch (e) {
       unknownError();
       console.log(e);
     } finally {
       setLoad(false);
-      resetField();
     }
   };
 
@@ -404,7 +407,7 @@ function WatchedModal({ initialOpen, resetField, user }) {
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
                     onClick={() => {
-                      resetField();
+                      resetField(false);
                       setStars(1);
                     }}
                     ref={cancelButtonRef}
