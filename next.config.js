@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const { withAxiom } = require("next-axiom");
+const { withPlausibleProxy } = require("next-plausible");
 
 const nextConfig = {
   reactStrictMode: true,
@@ -9,4 +9,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withAxiom(nextConfig);
+module.exports = withPlausibleProxy()(nextConfig);
