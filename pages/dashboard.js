@@ -213,7 +213,7 @@ function WatchList({ user }) {
       <div className="px-4 sm:px-6 lg:px-8">
         <WatchedModal
           initialOpen={openModal}
-          resetField={() => resetField()}
+          resetField={resetField}
           user={user}
         />
         <div className="mt-8 flex flex-col">
