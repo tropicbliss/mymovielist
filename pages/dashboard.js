@@ -397,8 +397,8 @@ function WatchedModal({ initialOpen, resetField, user }) {
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-cyber-purple px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2 sm:col-start-2 sm:text-sm"
                     onClick={() => {
-                      setStars(1);
                       submitMovie();
+                      setStars(1);
                     }}
                   >
                     Rate Movie
