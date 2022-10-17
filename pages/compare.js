@@ -34,14 +34,16 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
         : setMovieInfo3;
     const setSearch =
       searchNum === 1 ? setSearch1 : searchNum === 2 ? setSearch2 : setSearch3;
-    if (search === "") {
+    const keyword = search.trim();
+    setSearch("");
+    if (keyword === "") {
       setErrorMsg("Error comparing movies", "Movie entered cannot be empty.");
       setToast(true);
       return;
     }
     setLoad(true);
     try {
-      const data = await getMovieInfoFromTitle(search);
+      const data = await getMovieInfoFromTitle(keyword);
       if (!data.info) {
         setErrorMsg(
           "Error comparing movies",
@@ -55,7 +57,6 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
       unknownError();
       console.log(e);
     } finally {
-      setSearch("");
       setLoad(false);
     }
   };
