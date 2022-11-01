@@ -117,36 +117,39 @@ const Nav = () => {
             <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="flex items-center px-2 lg:px-0">
-                  <Link href="/">
-                    <a
-                      className="flex-shrink-0 flex items-center space-x-3"
-                      aria-label="Go back to home page"
-                    >
-                      <FilmIcon className="block h-8 w-auto text-cyber-purple lg:hidden" />
-                      <FilmIcon className="hidden h-8 w-auto text-cyber-purple lg:block" />
-                    </a>
+                  <Link
+                    href="/"
+                    className="flex-shrink-0 flex items-center space-x-3"
+                    aria-label="Go back to home page"
+                  >
+                    <FilmIcon className="block h-8 w-auto text-cyber-purple lg:hidden" />
+                    <FilmIcon className="hidden h-8 w-auto text-cyber-purple lg:block" />
                   </Link>
                   <div className="hidden lg:ml-6 lg:block">
                     <div className="flex space-x-4">
-                      <Link href="/news/1">
-                        <a className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
-                          News
-                        </a>
+                      <Link
+                        href="/news/1"
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                      >
+                        News
                       </Link>
-                      <Link href="/compare">
-                        <a className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
-                          Compare
-                        </a>
+                      <Link
+                        href="/compare"
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                      >
+                        Compare
                       </Link>
-                      <Link href="/ranking">
-                        <a className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
-                          Global Rank
-                        </a>
+                      <Link
+                        href="/ranking"
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                      >
+                        Global Rank
                       </Link>
-                      <Link href="/chat">
-                        <a className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
-                          Global Chat
-                        </a>
+                      <Link
+                        href="/chat"
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                      >
+                        Global Chat
                       </Link>
                     </div>
                   </div>
@@ -217,15 +220,14 @@ const Nav = () => {
                             <Menu.Item>
                               {({ active }) => (
                                 <span>
-                                  <Link href="/dashboard">
-                                    <a
-                                      className={classNames(
-                                        active ? "bg-gray-100" : "",
-                                        "block px-4 py-2 text-sm text-gray-700"
-                                      )}
-                                    >
-                                      Dashboard
-                                    </a>
+                                  <Link
+                                    href="/dashboard"
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    Dashboard
                                   </Link>
                                 </span>
                               )}

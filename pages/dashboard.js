@@ -157,15 +157,13 @@ function NoMovie() {
       </p>
       <div className="mt-6">
         <Link href="/ranking">
-          <a>
-            <button
-              type="button"
-              className="inline-flex items-center rounded-md border border-transparent bg-cyber-purple px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2"
-            >
-              <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-              Global Rank
-            </button>
-          </a>
+          <button
+            type="button"
+            className="inline-flex items-center rounded-md border border-transparent bg-cyber-purple px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cyber-purple focus:ring-offset-2"
+          >
+            <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            Global Rank
+          </button>
         </Link>
       </div>
     </div>
@@ -246,7 +244,7 @@ function WatchList({ user }) {
                         }
                       >
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6 underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
-                          <Link href={`/moviedb/${movie.id}`}>
+                          <Link href={`/moviedb/${movie.id}`} legacyBehavior>
                             {movie.movieTitle}
                           </Link>
                         </td>

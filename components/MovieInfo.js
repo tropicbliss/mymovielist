@@ -18,7 +18,7 @@ import { database } from "../firebaseConfig";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { format } from "date-fns";
 import { GlobalContext } from "../context/GlobalState";
-import Image from "next/future/image";
+import Image from "next/image";
 import Avatar from "./Avatar";
 
 function getStars(imdbRating) {

@@ -123,7 +123,10 @@ const MovieList = ({ uid, showName }) => {
                               {movieIdx + 1}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
-                              <Link href={`/moviedb/${movie.id}`}>
+                              <Link
+                                href={`/moviedb/${movie.id}`}
+                                legacyBehavior
+                              >
                                 {movie.movieTitle}
                               </Link>
                             </td>

@@ -1,4 +1,4 @@
-import Image from "next/future/image";
+import Image from "next/image";
 
 const Avatar = ({ profileURL, initials }) => {
   if (profileURL) {

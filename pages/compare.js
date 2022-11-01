@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import Image from "next/future/image";
+import Image from "next/image";
 import { getMovieInfo, getMovieInfoFromTitle, classNames } from "../utilities";
 import { GlobalContext } from "../context/GlobalState";
 import { Fragment } from "react";
@@ -210,23 +210,21 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
               <section key={movieIdx}>
                 <div className="mb-8 px-4">
                   <Link href={movie.link}>
-                    <a>
-                      <h2 className="text-lg mb-3 font-medium leading-6 underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
-                        {movie.title}
-                      </h2>
-                      {movie.poster ? (
-                        <Image
-                          className="rounded"
-                          src={movie.poster}
-                          height="182"
-                          width="146"
-                          alt={`Movie poster of ${movie.title}`}
-                          priority
-                        />
-                      ) : (
-                        <p className="text-sm">Movie poster not found</p>
-                      )}
-                    </a>
+                    <h2 className="text-lg mb-3 font-medium leading-6 underline text-blue-600 hover:text-blue-800 visited:text-purple-600">
+                      {movie.title}
+                    </h2>
+                    {movie.poster ? (
+                      <Image
+                        className="rounded"
+                        src={movie.poster}
+                        height="182"
+                        width="146"
+                        alt={`Movie poster of ${movie.title}`}
+                        priority
+                      />
+                    ) : (
+                      <p className="text-sm">Movie poster not found</p>
+                    )}
                   </Link>
                 </div>
 
@@ -285,7 +283,7 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                     <span>Movies</span>
                   </th>
                   {movies.map((movie, movieIdx) => (
-                    <Link href={movie.link} key={movieIdx}>
+                    <Link href={movie.link} key={movieIdx} legacyBehavior>
                       <th
                         className="w-1/4 cursor-pointer px-6 pb-4 text-left text-lg font-medium leading-6 underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
                         scope="col"
@@ -308,20 +306,18 @@ const Compare = ({ startingInfo1, startingInfo2, startingInfo3 }) => {
                     <td key={movieIdx} className="h-full py-8 px-6 align-top">
                       <div className="relative table h-full">
                         <Link href={movie.link}>
-                          <a>
-                            {movie.poster ? (
-                              <Image
-                                className="rounded"
-                                src={movie.poster}
-                                height="182"
-                                width="146"
-                                alt={`Movie poster of ${movie.title}`}
-                                priority
-                              />
-                            ) : (
-                              <p className="text-sm">Movie poster not found</p>
-                            )}
-                          </a>
+                          {movie.poster ? (
+                            <Image
+                              className="rounded"
+                              src={movie.poster}
+                              height="182"
+                              width="146"
+                              alt={`Movie poster of ${movie.title}`}
+                              priority
+                            />
+                          ) : (
+                            <p className="text-sm">Movie poster not found</p>
+                          )}
                         </Link>
                       </div>
                     </td>
