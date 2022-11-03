@@ -12,7 +12,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@headlessui/react": "^1.7.3",
-    "@heroicons/react": "^2.0.12",
+    "@heroicons/react": "^2.0.13",
     "@mui/material": "^5.10.12",
     "date-fns": "^2.29.3",
     "firebase": "^9.13.0",
