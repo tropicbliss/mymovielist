@@ -13,6 +13,7 @@ const Footer = () => {
         </svg>
       ),
     },
+<<<<<<< HEAD
     {
       name: "Wordle Solver",
       href: "https://wordlesolver.tropicbliss.net",
@@ -33,6 +34,8 @@ const Footer = () => {
         </svg>
       ),
     },
+=======
+>>>>>>> parent of e2943fa (E)
   ];
 
   return (
