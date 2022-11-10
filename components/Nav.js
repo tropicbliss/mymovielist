@@ -14,22 +14,12 @@ import { LinearProgress } from "@mui/material";
 import { GlobalContext } from "../context/GlobalState";
 import Avatar from "./Avatar";
 
-async function signInWithGoogle() {
-  const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth, provider);
-}
-
-function signOut() {
-  if (auth.currentUser) {
-    auth.signOut();
-  }
-}
-
 async function handleUserPortal() {
   if (auth.currentUser) {
-    signOut();
+    auth.signOut();
   } else {
-    await signInWithGoogle();
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
   }
 }
 
